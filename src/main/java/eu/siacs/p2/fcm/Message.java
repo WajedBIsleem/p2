@@ -7,6 +7,7 @@ public class Message {
 
     public final Priority priority;
     public final Data data;
+    public final Data notification;
     public final String to;
     public final String collapseKey;
 
