@@ -7,13 +7,14 @@ public class Message {
 
     public final Priority priority;
     public final Data data;
-    public final Data notification;
+    public final Notification notification;
     public final String to;
     public final String collapseKey;
 
-    private Message(Priority priority, Data data, String to, String collapseKey) {
+    private Message(Priority priority, Data data, Notification notification, String to, String collapseKey) {
         this.priority = priority;
         this.data = data;
+        this.notification = notification;
         this.to = to;
         this.collapseKey = collapseKey;
     }
@@ -26,6 +27,9 @@ public class Message {
         final Data data = new Data();
         data.account = account;
         data.channel = channel == null || channel.isEmpty() ? null : channel;
+        
+        final Notification notification = new Notification();
+                
         final String collapseKey;
         if (collapse) {
             if (data.channel == null) {
@@ -36,7 +40,7 @@ public class Message {
         } else {
             collapseKey = null;
         }
-        return new Message(Priority.HIGH, data, token, collapseKey);
+        return new Message(Priority.HIGH, data, notification, token, collapseKey);
     }
 
     public enum Priority {
@@ -48,5 +52,9 @@ public class Message {
         String title = "New message";
         String account;
         String channel;
+    }
+    
+    public static class Notification {
+        String title = "New message";
     }
 }
