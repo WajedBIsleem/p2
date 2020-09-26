@@ -52,7 +52,6 @@ public class FcmPushService implements PushService {
             final Response<Result> response = this.httpInterface.send(message, "key=" + authKey).execute();
             if (response.isSuccessful()) {
                 final Result result = response.body();
-                LOGGER.warn("Wajed: " + result.multicastId);
                 
                 LOGGER.warn("Wajed: authKey=" + authKey);
                 LOGGER.warn("Wajed: token=" + message.to);
