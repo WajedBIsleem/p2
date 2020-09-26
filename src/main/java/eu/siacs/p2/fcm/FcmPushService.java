@@ -57,7 +57,7 @@ public class FcmPushService implements PushService {
                 LOGGER.warn("Wajed: token=" + message.to);
                 LOGGER.warn("Wajed: multicastId=" + result.multicastId);
                 LOGGER.warn("Wajed: getSuccess=" + result.getSuccess());
-                LOGGER.warn("Wajed: getFailure" + message.getFailure);
+                LOGGER.warn("Wajed: getFailure" + result.getFailure());
                 
                 return result != null && result.getSuccess() > 0;
             } else {
