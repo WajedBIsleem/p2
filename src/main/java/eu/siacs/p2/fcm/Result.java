@@ -7,7 +7,7 @@ public class Result {
     private int success;
     private int failure;
     @SerializedName("multicast_id")
-    private long multicastId;
+    public long multicastId;
 
 
     public int getSuccess() {
