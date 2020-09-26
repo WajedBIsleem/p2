@@ -5,10 +5,10 @@ import eu.siacs.p2.pojo.Target;
 
 public class Message {
 
-    private final Priority priority;
-    private final Data data;
-    private final String to;
-    private final String collapseKey;
+    public final Priority priority;
+    public final Data data;
+    public final String to;
+    public final String collapseKey;
 
     private Message(Priority priority, Data data, String to, String collapseKey) {
         this.priority = priority;
