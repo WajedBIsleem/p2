@@ -45,6 +45,7 @@ public class Message {
     }
 
     public static class Data {
+        String title = "New message";
         String account;
         String channel;
     }
