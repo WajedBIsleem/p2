@@ -56,5 +56,6 @@ public class Message {
     
     public static class Notification {
         String title = "New message";
+        String sound = "default";
     }
 }
