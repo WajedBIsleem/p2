@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import eu.siacs.p2.apns.ApnsPushService;
 import eu.siacs.p2.fcm.FcmPushService;
-import rocks.xmpp.addr.Jid;
 
 import java.io.File;
 import java.io.FileNotFoundException;

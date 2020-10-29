@@ -1,7 +1,5 @@
 package eu.siacs.p2.pushy;
 
-import com.google.gson.annotations.SerializedName;
-import eu.siacs.p2.pojo.Target;
 
 public class PushyMessage {
     public final String to;

@@ -1,12 +1,9 @@
 package eu.siacs.p2;
 
 import eu.siacs.p2.controller.PushController;
-import eu.siacs.p2.pojo.Service;
-import eu.siacs.p2.pojo.Target;
 import eu.siacs.p2.xmpp.extensions.push.Notification;
 import org.apache.commons.cli.*;
 import org.conscrypt.Conscrypt;
-import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.XmppException;
 import rocks.xmpp.core.session.Extension;
 import rocks.xmpp.core.session.XmppSessionConfiguration;

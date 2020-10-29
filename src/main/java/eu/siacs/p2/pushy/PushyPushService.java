@@ -2,7 +2,6 @@ package eu.siacs.p2.pushy;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
-import eu.siacs.p2.Configuration;
 import eu.siacs.p2.PushService;
 import eu.siacs.p2.pojo.Target;
 import okhttp3.ResponseBody;
