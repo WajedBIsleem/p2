@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.collect.ImmutableMap;
 import eu.siacs.p2.apns.ApnsPushService;
 import eu.siacs.p2.fcm.FcmPushService;
+import eu.siacs.p2.pushy.PushyPushService;
 import eu.siacs.p2.pojo.Service;
 
 public class PushServiceManager {
@@ -16,9 +17,10 @@ public class PushServiceManager {
         SERVICES = ImmutableClassToInstanceMap.<PushService>builder()
                 .put(FcmPushService.class, new FcmPushService())
                 .put(ApnsPushService.class, new ApnsPushService())
+                .put(PushyPushService.class, new PushyPushService())
                 .build();
 
-        SERVICE_TO_CLASS = ImmutableMap.of(Service.FCM, FcmPushService.class, Service.APNS, ApnsPushService.class);
+        SERVICE_TO_CLASS = ImmutableMap.of(Service.FCM, FcmPushService.class, Service.APNS, ApnsPushService.class, Service.PUSHY, PushyPushService.class);
     }
 
     public static PushService getPushServiceInstance(Service service) {
