@@ -36,7 +36,7 @@ public class PushyPushService implements PushService {
 
     @Override
     public boolean push(Target target, boolean highPriority) {
-        final PushyMessage message = PushyMessage.create(target.getToken());
+        final PushyMessage message = new PushyMessage(target.getToken());
         return push(message);
     }
 

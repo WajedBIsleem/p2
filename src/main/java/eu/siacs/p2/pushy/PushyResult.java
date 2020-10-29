@@ -4,6 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class PushyResult {
 
-    private boolean success;
-    private String id;
+    public boolean success;
+    public String id;
 }

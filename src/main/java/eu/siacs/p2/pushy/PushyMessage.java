@@ -8,18 +8,12 @@ public class PushyMessage {
     public final Data data;
     public final Notification notification;
 
-    private PushyMessage(String to, Data data, Notification notificatio) {
+    private PushyMessage(String to) {
         this.to = to;
-        this.data = data;
-        this.notification = notification;
+        this.data = new Data();
+        this.notification = new Notification();
     }
     
-    public static PushyMessage create(String token) {
-        final Data data = new Data();
-        final Notification notification = new Notification();
-        return new PushyMessage(token, data, notification);
-    }
-
     public static class Data {
         String title = "New message";
     }
