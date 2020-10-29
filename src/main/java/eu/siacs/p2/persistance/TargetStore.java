@@ -17,7 +17,7 @@ import java.util.Map;
 public class TargetStore {
 
     private static final Map<Class, Converter> CONVERTERS;
-    private static final String CREATE_TARGET_TABLE = "create table if not exists target(service char(4), device CHAR(40) NOT NULL, channel CHAR(40) NOT NULL DEFAULT '', domain varchar(253), token varchar(255), node char(12), secret char(24), primary key(device, channel), index nodeDomain (node,domain));";
+    private static final String CREATE_TARGET_TABLE = "create table if not exists target(service char(5), device CHAR(40) NOT NULL, channel CHAR(40) NOT NULL DEFAULT '', domain varchar(253), token varchar(255), node char(12), secret char(24), primary key(device, channel), index nodeDomain (node,domain));";
     private static TargetStore INSTANCE = null;
 
     static {
