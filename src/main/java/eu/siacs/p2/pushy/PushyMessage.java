@@ -14,7 +14,7 @@ public class PushyMessage {
         this.notification = notification;
     }
     
-    private static PushyMessage create(String token) {
+    public static PushyMessage create(String token) {
         final Data data = new Data();
         final Notification notification = new Notification();
         return new PushyMessage(token, data, notification);
