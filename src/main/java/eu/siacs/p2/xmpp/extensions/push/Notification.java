@@ -13,10 +13,6 @@ public class Notification {
     @XmlElement(name = "x", namespace = DataForm.NAMESPACE)
     private DataForm pushSummary;
 
-    private Notification() {
-
-    }
-
     public Notification(DataForm pushSummary) {
         this.pushSummary = pushSummary;
     }
