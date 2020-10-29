@@ -8,7 +8,7 @@ public class PushyMessage {
     public final Data data;
     public final Notification notification;
 
-    private PushyMessage(String to) {
+    public PushyMessage(String to) {
         this.to = to;
         this.data = new Data();
         this.notification = new Notification();
