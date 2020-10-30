@@ -29,7 +29,7 @@ class Notification {
 
     public Notification(MessageBody messagebody) {
         if (messagebody.type.equals("text")) {
-            body = messagebody.content.substring(0, 20);
+            body = messagebody.content;
         }else if (messagebody.type.equals("image")) {
             body = "Receive image";
         }else if (messagebody.type.equals("voice")) {
