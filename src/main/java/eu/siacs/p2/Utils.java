@@ -26,19 +26,24 @@ public class Utils {
     }
 
     public static void log(String log) {
+        System.out.print(log);
         try {
             File myObj = new File("log.txt");
             if (!myObj.exists()) {
+                System.out.print("file does not exists");
                 myObj.createNewFile();
+                System.out.print(myObj.getAbsolutePath());
             }
             if (myObj.exists()) {
+                System.out.print("file exists");
                 FileWriter myWriter = new FileWriter(myObj);
                 myWriter.write("\n");
                 myWriter.write(log);
+                System.out.print("file path : " + myObj.getAbsolutePath());
                 myWriter.close();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.print(e.getMessage());
         }
     }
 
