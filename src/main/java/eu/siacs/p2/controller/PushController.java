@@ -19,6 +19,8 @@ import rocks.xmpp.extensions.pubsub.model.PubSub;
 
 import java.util.*;
 
+import com.google.gson.Gson;
+
 public class PushController {
 
     private static final String COMMAND_NODE_REGISTER_PREFIX = "register-push-";
@@ -49,10 +51,12 @@ public class PushController {
                     && !isNullOrEmpty(pushSummary.findValue("last-message-body"));
 
             String messageSender = pushSummary.findValue("last-message-sender");
-            String messageBody = pushSummary.findValue("last-message-body");
 
-            Utils.log("messageSender : " + messageSender);
-            Utils.log("messageBody : " + messageBody);
+            Gson gson = new Gson();
+            MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
+
+            Utils.log("messageBody content : " + messageBody.content);
+            Utils.log("messageBody type : " + messageBody.type);
 
             if (node != null && secret != null && jid.isBareJid()) {
                 final Jid domain = Jid.ofDomain(jid.getDomain());
