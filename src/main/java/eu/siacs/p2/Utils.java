@@ -28,12 +28,15 @@ public class Utils {
     public static void log(String log) {
         try {
             File myObj = new File("log.txt");
-            myObj.createNewFile();
-
-            FileWriter myWriter = new FileWriter(myObj);
-            myWriter.write("\n");
-            myWriter.write(log);
-            myWriter.close();
+            if (!myObj.exists()) {
+                myObj.createNewFile();
+            }
+            if (myObj.exists()) {
+                FileWriter myWriter = new FileWriter(myObj);
+                myWriter.write("\n");
+                myWriter.write(log);
+                myWriter.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
