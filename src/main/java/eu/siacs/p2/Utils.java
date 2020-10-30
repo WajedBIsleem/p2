@@ -25,7 +25,7 @@ public class Utils {
 
     public static void log(String log){
         try {
-            Files.write(Paths.get("log.txt"), log.getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get("/etc/p2/log.txt"), log.getBytes(), StandardOpenOption.APPEND);
         }catch (IOException e) {
         }
     }
