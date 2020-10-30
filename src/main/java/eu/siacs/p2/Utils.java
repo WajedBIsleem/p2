@@ -2,6 +2,8 @@ package eu.siacs.p2;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,10 +25,17 @@ public class Utils {
         return DigestUtils.sha1Hex(Arrays.stream(parts).collect(Collectors.joining("\00")));
     }
 
-    public static void log(String log){
+    public static void log(String log) {
         try {
-            Files.write(Paths.get("/etc/p2/log.txt"), log.getBytes(), StandardOpenOption.APPEND);
-        }catch (IOException e) {
+            File myObj = new File("log.txt");
+            myObj.createNewFile();
+
+            FileWriter myWriter = new FileWriter(myObj);
+            myWriter.write("\n");
+            myWriter.write(log);
+            myWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
