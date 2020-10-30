@@ -6,6 +6,7 @@ import eu.siacs.p2.Configuration;
 import eu.siacs.p2.PushService;
 import eu.siacs.p2.pojo.Target;
 import eu.siacs.p2.util.TrustManager;
+import eu.siacs.p2.xmpp.extensions.push.MessageBody;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
@@ -67,7 +68,7 @@ public class ApnsPushService implements PushService {
     }
 
     @Override
-    public boolean push(final Target target, final boolean highPriority) {
+    public boolean push(final Target target, final String sender, final MessageBody body) {
         LOGGER.info("attempt push to APNS ("+target.getToken()+")");
         final ApnsConfiguration configuration = Configuration.getInstance().getApnsConfiguration();
         final String bundleId = configuration == null ? null : configuration.getBundleId();
@@ -76,7 +77,7 @@ public class ApnsPushService implements PushService {
             return false;
         }
         try {
-            final Notification notification = highPriority ? Notification.createAlert() : Notification.createContentAvailable();
+            final Notification notification = Notification.createAlert();
             final Response<Void> response = this.httpInterface.sendAlert(target.getToken(), bundleId, notification).execute();
             if (response.isSuccessful()) {
                 LOGGER.info("push to APNS was successful");

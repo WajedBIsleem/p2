@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import eu.siacs.p2.Configuration;
 import eu.siacs.p2.PushService;
 import eu.siacs.p2.pojo.Target;
+import eu.siacs.p2.xmpp.extensions.push.MessageBody;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,6 @@ public class FcmPushService implements PushService {
 
     private final FcmHttpInterface httpInterface;
 
-
     public FcmPushService() {
         final GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
@@ -35,15 +35,14 @@ public class FcmPushService implements PushService {
     }
 
     @Override
-    public boolean push(Target target, boolean highPriority) {
-        final FcmConfiguration config = Configuration.getInstance().getFcmConfiguration();
-        final Message message = Message.createHighPriority(target, config.isCollapse());
+    public boolean push(Target target, String sender, MessageBody body) {
+        final Message message = Message.createHighPriority(target, true);
         return push(message);
     }
 
     private boolean push(Message message) {
         final FcmConfiguration config = Configuration.getInstance().getFcmConfiguration();
-        final String authKey = config == null ? null :config.getAuthKey();
+        final String authKey = config == null ? null : config.getAuthKey();
         if (authKey == null) {
             LOGGER.warn("No fcm auth key configured");
             return false;
@@ -56,7 +55,7 @@ public class FcmPushService implements PushService {
             } else {
                 final ResponseBody errorBody = response.errorBody();
                 final String errorBodyString = errorBody == null ? null : errorBody.string();
-                LOGGER.warn("push to FCM failed with response code=" +response.code()+", body="+errorBodyString);
+                LOGGER.warn("push to FCM failed with response code=" + response.code() + ", body=" + errorBodyString);
                 return false;
             }
         } catch (Exception e) {
@@ -64,7 +63,6 @@ public class FcmPushService implements PushService {
             return false;
         }
     }
-
 
     public static class FcmConfiguration {
         private String authKey;

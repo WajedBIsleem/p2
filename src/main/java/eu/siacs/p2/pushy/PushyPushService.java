@@ -4,6 +4,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import eu.siacs.p2.PushService;
 import eu.siacs.p2.pojo.Target;
+import eu.siacs.p2.xmpp.extensions.push.MessageBody;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,6 @@ public class PushyPushService implements PushService {
 
     private final PushyHttpInterface httpInterface;
 
-
     public PushyPushService() {
         final GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
@@ -34,9 +34,12 @@ public class PushyPushService implements PushService {
     }
 
     @Override
-    public boolean push(Target target, boolean highPriority) {
-        final PushyMessage message = new PushyMessage(target.getToken());
-        return push(message);
+    public boolean push(Target target, String sender, MessageBody body) {
+        final PushyMessage message = new PushyMessage(target.getToken(), sender, body);
+        if (!body.type.equals("update"))
+            return push(message);
+        else
+            return true;
     }
 
     private boolean push(PushyMessage message) {
@@ -48,7 +51,7 @@ public class PushyPushService implements PushService {
             } else {
                 final ResponseBody errorBody = response.errorBody();
                 final String errorBodyString = errorBody == null ? null : errorBody.string();
-                LOGGER.warn("push to Pushy failed with response code=" +response.code()+", body="+errorBodyString);
+                LOGGER.warn("push to Pushy failed with response code=" + response.code() + ", body=" + errorBodyString);
                 return false;
             }
         } catch (Exception e) {

@@ -1,4 +1,4 @@
-package eu.siacs.p2.controller;
+package eu.siacs.p2.xmpp.extensions.push;
 
 public class MessageBody {
     public String content;

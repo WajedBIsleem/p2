@@ -7,6 +7,7 @@ import eu.siacs.p2.Utils;
 import eu.siacs.p2.persistance.TargetStore;
 import eu.siacs.p2.pojo.Service;
 import eu.siacs.p2.pojo.Target;
+import eu.siacs.p2.xmpp.extensions.push.MessageBody;
 import eu.siacs.p2.xmpp.extensions.push.Notification;
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.stanza.IQHandler;
@@ -47,16 +48,11 @@ public class PushController {
             final DataForm publishOptions = pubSub.getPublishOptions();
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
-            final boolean hasLastMessageBody = pushSummary != null
-                    && !isNullOrEmpty(pushSummary.findValue("last-message-body"));
 
             String messageSender = pushSummary.findValue("last-message-sender");
 
             Gson gson = new Gson();
             MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
-
-            Utils.log("messageBody content : " + messageBody.content);
-            Utils.log("messageBody type : " + messageBody.type);
 
             if (node != null && secret != null && jid.isBareJid()) {
                 final Jid domain = Jid.ofDomain(jid.getDomain());
@@ -70,7 +66,7 @@ public class PushController {
                             e.printStackTrace();
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
-                        if (pushService.push(target, hasLastMessageBody)) {
+                        if (pushService.push(target, messageSender, messageBody)) {
                             return iq.createResult();
                         } else {
                             return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
