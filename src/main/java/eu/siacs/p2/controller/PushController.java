@@ -16,14 +16,10 @@ import rocks.xmpp.extensions.commands.model.Command;
 import rocks.xmpp.extensions.data.model.DataForm;
 import rocks.xmpp.extensions.pubsub.model.Item;
 import rocks.xmpp.extensions.pubsub.model.PubSub;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class PushController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PushController.class);
 
     private static final String COMMAND_NODE_REGISTER_PREFIX = "register-push-";
     private static final String COMMAND_NODE_UNREGISTER_PREFIX = "unregister-push-";
@@ -49,7 +45,8 @@ public class PushController {
             final DataForm publishOptions = pubSub.getPublishOptions();
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
-            final boolean hasLastMessageBody = pushSummary != null && !isNullOrEmpty(pushSummary.findValue("last-message-body"));
+            final boolean hasLastMessageBody = pushSummary != null
+                    && !isNullOrEmpty(pushSummary.findValue("last-message-body"));
 
             if (node != null && secret != null && jid.isBareJid()) {
                 final Jid domain = Jid.ofDomain(jid.getDomain());
@@ -93,20 +90,14 @@ public class PushController {
     }
 
     private static IQ register(final IQ iq, final Command command) {
-        LOGGER.warn("register");
-        final Optional<DataForm> optionalData = command.getPayloads().stream()
-                .filter(p -> p instanceof DataForm)
-                .map(p -> (DataForm) p)
-                .findFirst();
+        final Optional<DataForm> optionalData = command.getPayloads().stream().filter(p -> p instanceof DataForm)
+                .map(p -> (DataForm) p).findFirst();
         final Jid from = iq.getFrom().asBareJid();
         if (optionalData.isPresent()) {
             final DataForm data = optionalData.get();
             final String deviceId = findDeviceId(data);
             final String token = data.findValue("token");
             final Jid muc = data.findValueAsJid("muc");
-
-            LOGGER.warn("register: deviceId=" + deviceId);
-            LOGGER.warn("register: token=" + token);
 
             if (isNullOrEmpty(token) || isNullOrEmpty(deviceId)) {
                 return iq.createError(Condition.BAD_REQUEST);
@@ -119,18 +110,12 @@ public class PushController {
             final String device = Utils.combineAndHash(from.toEscapedString(), deviceId);
             final String channel = muc == null ? "" : Utils.combineAndHash(muc.toEscapedString(), deviceId);
 
-            LOGGER.warn("register: deviceId=" + device);
-
-            final Service service;
-            try {
-                service = findService(COMMAND_NODE_REGISTER_PREFIX, command.getNode());
-                
-                LOGGER.warn("register: service=" + service);
-            } catch (IllegalArgumentException e) {
-                
-                LOGGER.warn("register: error=" + e.getMessage());
-                return iq.createError(Condition.ITEM_NOT_FOUND);
-            }
+            final Service service = Service.PUSHY;
+            // try {
+            // service = findService(COMMAND_NODE_REGISTER_PREFIX, command.getNode());
+            // } catch (IllegalArgumentException e) {
+            // return iq.createError(Condition.ITEM_NOT_FOUND);
+            // }
 
             Target target = TargetStore.getInstance().find(service, device, channel);
 
@@ -149,13 +134,9 @@ public class PushController {
                 TargetStore.getInstance().create(target);
             }
 
-            final Command result = new Command(command.getNode(),
-                    String.valueOf(System.currentTimeMillis()),
-                    Command.Status.COMPLETED,
-                    null,
-                    null,
-                    Collections.singletonList(createRegistryResponseDataForm(target.getNode(), target.getSecret()))
-            );
+            final Command result = new Command(command.getNode(), String.valueOf(System.currentTimeMillis()),
+                    Command.Status.COMPLETED, null, null,
+                    Collections.singletonList(createRegistryResponseDataForm(target.getNode(), target.getSecret())));
             return iq.createResult(result);
         } else {
             return iq.createError(Condition.BAD_REQUEST);
@@ -198,10 +179,8 @@ public class PushController {
     }
 
     private static IQ unregister(final IQ iq, final Command command) {
-        final Optional<DataForm> optionalData = command.getPayloads().stream()
-                .filter(p -> p instanceof DataForm)
-                .map(p -> (DataForm) p)
-                .findFirst();
+        final Optional<DataForm> optionalData = command.getPayloads().stream().filter(p -> p instanceof DataForm)
+                .map(p -> (DataForm) p).findFirst();
         final Jid from = iq.getFrom().asBareJid();
         if (optionalData.isPresent()) {
 
