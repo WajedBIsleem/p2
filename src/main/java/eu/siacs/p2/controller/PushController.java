@@ -116,7 +116,7 @@ public class PushController {
             try {
                 service = findService(COMMAND_NODE_REGISTER_PREFIX, command.getNode());
             } catch (IllegalArgumentException e) {
-                return iq.createError(Condition.INTERNAL_SERVER_ERROR);
+                return iq.createError(Condition.ITEM_NOT_FOUND);
             }
 
             Target target = TargetStore.getInstance().find(service, device, channel);
