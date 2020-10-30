@@ -205,9 +205,8 @@ public class PushController {
         final Jid from = iq.getFrom().asBareJid();
         if (optionalData.isPresent()) {
 
-            final Service service;
             try {
-                service = findService(COMMAND_NODE_UNREGISTER_PREFIX, command.getNode());
+                findService(COMMAND_NODE_UNREGISTER_PREFIX, command.getNode());
             } catch (IllegalArgumentException e) {
                 return iq.createError(Condition.ITEM_NOT_FOUND);
             }
