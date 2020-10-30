@@ -112,12 +112,12 @@ public class PushController {
             final String device = Utils.combineAndHash(from.toEscapedString(), deviceId);
             final String channel = muc == null ? "" : Utils.combineAndHash(muc.toEscapedString(), deviceId);
 
-            final Service service = Service.PUSHY;
-            // try {
-            // service = findService(COMMAND_NODE_REGISTER_PREFIX, command.getNode());
-            // } catch (IllegalArgumentException e) {
-            // return iq.createError(Condition.ITEM_NOT_FOUND);
-            // }
+            final Service service;
+            try {
+                service = findService(COMMAND_NODE_REGISTER_PREFIX, command.getNode());
+            } catch (IllegalArgumentException e) {
+                return iq.createError(Condition.INTERNAL_SERVER_ERROR);
+            }
 
             Target target = TargetStore.getInstance().find(service, device, channel);
 
