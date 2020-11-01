@@ -110,8 +110,6 @@ public class PushController {
                 return iq.createError(Condition.BAD_REQUEST);
             }
 
-            final String device = Utils.combineAndHash(from.toEscapedString(), deviceId);
-
             final Service service;
             try {
                 service = findService(COMMAND_NODE_REGISTER_PREFIX, command.getNode());
@@ -119,7 +117,7 @@ public class PushController {
                 return iq.createError(Condition.ITEM_NOT_FOUND);
             }
 
-            Target target = TargetStore.getInstance().find(service, from.getLocal(), device);
+            Target target = TargetStore.getInstance().find(service, from.getLocal(), deviceId);
 
             if (target != null) {
                 if (target.setToken(token)) {
