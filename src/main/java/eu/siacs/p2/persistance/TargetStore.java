@@ -17,7 +17,7 @@ import java.util.Map;
 public class TargetStore {
 
     private static final Map<Class, Converter> CONVERTERS;
-    private static final String CREATE_TARGET_TABLE = "create table if not exists target(service char(5), device CHAR(40) NOT NULL, channel CHAR(40) NOT NULL DEFAULT '', domain varchar(253), token varchar(255), node char(12), secret char(24), primary key(device, channel), index nodeDomain (node,domain));";
+    private static final String CREATE_TARGET_TABLE = "create table if not exists target(service char(5), account char(50), device char(40) NOT NULL, channel char(40) NOT NULL DEFAULT '', domain varchar(253), token varchar(255), node char(12), secret char(24), primary key(device, channel), index nodeDomain (node,domain));";
     private static TargetStore INSTANCE = null;
 
     static {
@@ -53,20 +53,20 @@ public class TargetStore {
 
     public void create(Target target) {
         try (Connection connection = database.open()) {
-            connection.createQuery("INSERT INTO target (service,device,domain,token,node,secret) VALUES(:service,:device,:domain,:token,:node,:secret)").bind(target).executeUpdate();
+            connection.createQuery("INSERT INTO target (service,account,device,domain,token,node,secret) VALUES(:service,:account,:device,:domain,:token,:node,:secret)").bind(target).executeUpdate();
         }
     }
 
     public Target find(Jid domain, String node) {
         try (Connection connection = database.open()) {
-            return connection.createQuery("select service,device,domain,token,node,secret from target where domain=:domain and node=:node limit 1").addParameter("domain", domain).addParameter("node", node).executeAndFetchFirst(Target.class);
+            return connection.createQuery("select service,account,device,domain,token,node,secret from target where domain=:domain and node=:node limit 1").addParameter("domain", domain).addParameter("node", node).executeAndFetchFirst(Target.class);
         }
     }
 
     public Target find(Service service, String device, String channel) {
         try (Connection connection = database.open()) {
             return connection
-                    .createQuery("select service,device,domain,channel,token,node,secret from target where service=:service and device=:device and channel=:channel")
+                    .createQuery("select service,account,device,domain,channel,token,node,secret from target where service=:service and device=:device and channel=:channel")
                     .addParameter("service", service)
                     .addParameter("device", device)
                     .addParameter("channel", channel)
