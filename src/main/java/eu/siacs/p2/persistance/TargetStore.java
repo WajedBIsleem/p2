@@ -68,7 +68,7 @@ public class TargetStore {
     public Target find(Service service, String account, String device) {
         try (Connection connection = database.open()) {
             return connection.createQuery(
-                    "select service,device,domain,channel,token,node,secret from target where service=:service and account=:account and device=:device")
+                    "select service,device,domain,token,node,secret from target where service=:service and account=:account and device=:device")
                     .addParameter("service", service).addParameter("account", account).addParameter("device", device)
                     .executeAndFetchFirst(Target.class);
         }
