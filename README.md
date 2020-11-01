@@ -115,6 +115,21 @@ systemctl start p2.service
 
 There is currently no way to reload the configuration file at runtime but you can always restart the service with `systemctl restart p2.service`.
 
+
+### Wajed Install
+```
+cd /opt
+sudo rm -rf p2
+sudo rm p2-0.3.jar
+
+sudo git clone https://github.com/WajedBIsleem/p2.git
+cd p2
+sudo mvn package
+
+sudo cp target/p2-0.3.jar /opt
+sudo systemctl restart p2.service
+
+
 ### Database
 
 Since version 0.3 the Conversations Push Proxy requires a database (drivers for MariaDB are included by default but you can easily change `pom.xml` to include other drivers as well.)
