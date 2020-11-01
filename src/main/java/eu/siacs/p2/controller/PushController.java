@@ -49,12 +49,9 @@ public class PushController {
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
 
-            String messageSender = pushSummary.findValue("last-message-sender");
-
-            Gson gson = new Gson();
-            MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
-
+            
             if (node != null && secret != null && jid.isBareJid()) {
+
                 final Target target = TargetStore.getInstance().find(node);
                 if (target != null) {
                     if (secret.equals(target.getSecret())) {
@@ -66,6 +63,12 @@ public class PushController {
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
                         if (target.getAccount() != jid.getLocal()) {
+                            
+                            String messageSender = pushSummary.findValue("last-message-sender");
+
+                            Gson gson = new Gson();
+                            MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
+
                             if (pushService.push(target, messageSender, messageBody)) {
                                 return iq.createResult();
                             } else {
