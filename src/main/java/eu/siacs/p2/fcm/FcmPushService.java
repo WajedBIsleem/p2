@@ -36,7 +36,7 @@ public class FcmPushService implements PushService {
 
     @Override
     public boolean push(Target target, String sender, MessageBody body) {
-        final Message message = Message.createHighPriority(target, true);
+        final Message message = Message.create(target);
         return push(message);
     }
 

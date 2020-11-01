@@ -55,8 +55,7 @@ public class PushController {
             MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
 
             if (node != null && secret != null && jid.isBareJid()) {
-                final Jid domain = Jid.ofDomain(jid.getDomain());
-                final Target target = TargetStore.getInstance().find(domain, node);
+                final Target target = TargetStore.getInstance().find(node);
                 if (target != null) {
                     if (secret.equals(target.getSecret())) {
                         final PushService pushService;
@@ -103,18 +102,12 @@ public class PushController {
             final DataForm data = optionalData.get();
             final String deviceId = findDeviceId(data);
             final String token = data.findValue("token");
-            final Jid muc = data.findValueAsJid("muc");
 
             if (isNullOrEmpty(token) || isNullOrEmpty(deviceId)) {
                 return iq.createError(Condition.BAD_REQUEST);
             }
 
-            if (muc != null && muc.isFullJid()) {
-                return iq.createError(Condition.BAD_REQUEST);
-            }
-
             final String device = Utils.combineAndHash(from.toEscapedString(), deviceId);
-            final String channel = muc == null ? "" : Utils.combineAndHash(muc.toEscapedString(), deviceId);
 
             final Service service;
             try {
@@ -123,7 +116,7 @@ public class PushController {
                 return iq.createError(Condition.ITEM_NOT_FOUND);
             }
 
-            Target target = TargetStore.getInstance().find(service, device, channel);
+            Target target = TargetStore.getInstance().find(service, from.getLocal(), device);
 
             if (target != null) {
                 if (target.setToken(token)) {
@@ -132,11 +125,7 @@ public class PushController {
                     }
                 }
             } else {
-                if (muc == null) {
-                    target = Target.create(service, from, deviceId, token);
-                } else {
-                    target = Target.createMuc(service, from, muc, deviceId, token);
-                }
+                target = Target.create(service, from, deviceId, token);
                 TargetStore.getInstance().create(target);
             }
 
@@ -198,12 +187,10 @@ public class PushController {
 
             final DataForm data = optionalData.get();
             final String deviceId = findDeviceId(data);
-            final String channel = data.findValue("channel");
-            if (isNullOrEmpty(channel) || isNullOrEmpty(deviceId)) {
+            if (isNullOrEmpty(deviceId)) {
                 return iq.createError(Condition.BAD_REQUEST);
             }
-            final String device = Utils.combineAndHash(from.toEscapedString(), deviceId);
-            if (TargetStore.getInstance().delete(device, channel)) {
+            if (TargetStore.getInstance().delete(from.getLocal(), deviceId)) {
                 final Command result = new Command(command.getNode(), Command.Action.COMPLETE);
                 return iq.createResult(result);
             } else {
