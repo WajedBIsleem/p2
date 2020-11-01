@@ -65,12 +65,15 @@ public class PushController {
                             e.printStackTrace();
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
-                        if (pushService.push(target, messageSender, messageBody)) {
-                            return iq.createResult();
+                        if (target.getAccount() != jid.getLocal()) {
+                            if (pushService.push(target, messageSender, messageBody)) {
+                                return iq.createResult();
+                            } else {
+                                return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                            }
                         } else {
                             return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                         }
-
                     } else {
                         return iq.createError(Condition.FORBIDDEN);
                     }
