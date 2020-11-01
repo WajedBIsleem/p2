@@ -50,10 +50,14 @@ public class TargetStore {
     }
 
     public void create(Target target) {
-        try (Connection connection = database.open()) {
-            connection.createQuery(
-                    "INSERT INTO target (service,account,device,domain,token,node,secret) VALUES(:service,:account,:device,:domain,:token,:node,:secret)")
-                    .bind(target).executeUpdate();
+
+        Target t = find(target.getService(), target.getAccount(), target.getDevice());
+        if (t == null) {
+            try (Connection connection = database.open()) {
+                connection.createQuery(
+                        "INSERT INTO target (service,account,device,domain,token,node,secret) VALUES(:service,:account,:device,:domain,:token,:node,:secret)")
+                        .bind(target).executeUpdate();
+            }
         }
     }
 
