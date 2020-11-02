@@ -3,7 +3,6 @@ package eu.siacs.p2.controller;
 import eu.siacs.p2.Configuration;
 import eu.siacs.p2.PushService;
 import eu.siacs.p2.PushServiceManager;
-import eu.siacs.p2.Utils;
 import eu.siacs.p2.persistance.TargetStore;
 import eu.siacs.p2.pojo.Service;
 import eu.siacs.p2.pojo.Target;
