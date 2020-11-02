@@ -128,7 +128,7 @@ sudo mvn package
 
 sudo cp target/p2-0.3.jar /opt
 sudo systemctl restart p2.service
-
+```
 
 ### Database
 
