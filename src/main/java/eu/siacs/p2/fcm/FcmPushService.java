@@ -36,11 +36,11 @@ public class FcmPushService implements PushService {
 
     @Override
     public boolean push(Target target, String sender, MessageBody body) {
-        final Message message = Message.create(target);
+        final FcmMessage message = new FcmMessage(target.getToken(), sender, body);
         return push(message);
     }
 
-    private boolean push(Message message) {
+    private boolean push(FcmMessage message) {
         final FcmConfiguration config = Configuration.getInstance().getFcmConfiguration();
         final String authKey = config == null ? null : config.getAuthKey();
         if (authKey == null) {
@@ -48,9 +48,9 @@ public class FcmPushService implements PushService {
             return false;
         }
         try {
-            final Response<Result> response = this.httpInterface.send(message, "key=" + authKey).execute();
+            final Response<FcmResult> response = this.httpInterface.send(message, "key=" + authKey).execute();
             if (response.isSuccessful()) {
-                final Result result = response.body();
+                final FcmResult result = response.body();
                 return result != null && result.getSuccess() > 0;
             } else {
                 final ResponseBody errorBody = response.errorBody();

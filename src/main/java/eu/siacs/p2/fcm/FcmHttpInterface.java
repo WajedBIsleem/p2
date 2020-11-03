@@ -8,6 +8,6 @@ import retrofit2.http.POST;
 public interface FcmHttpInterface {
 
     @POST("/fcm/send")
-    Call<Result> send(@Body Message message, @Header("Authorization") String authorization);
+    Call<FcmResult> send(@Body FcmMessage message, @Header("Authorization") String authorization);
 
 }
