@@ -12,17 +12,17 @@ public class PushyMessage {
         this.to = to;
 
         VCardService vCardService = new VCardService();
-        String account = vCardService.vcard(sender);
+        String senderName = vCardService.vcard(sender);
 
-        this.data = new Data(account, body);
-        this.notification = new Notification(account, body);
+        this.data = new Data(sender, senderName, body);
+        this.notification = new Notification(sender, senderName, body);
     }
 }
 
 class Data {
     String title = "New message";
 
-    public Data(String sender, MessageBody body) {
+    public Data(String sender, String senderName, MessageBody body) {
 
     }
 }
@@ -31,9 +31,12 @@ class Notification {
     String title = "New message";
     String body = "New message";
     String sound = "default";
+    String sender = "";
 
-    public Notification(String sender, MessageBody messagebody) {
-        title = sender;
+    public Notification(String sender, String senderName, MessageBody messagebody) {
+        this.sender = sender;
+        title = senderName;
+        
         if (messagebody.type.equals("text")) {
             body = messagebody.content;
         } else if (messagebody.type.equals("image")) {
