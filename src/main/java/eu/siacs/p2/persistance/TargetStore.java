@@ -80,8 +80,9 @@ public class TargetStore {
 
     public boolean update(Target target) {
         try (Connection connection = database.open()) {
-            return connection.createQuery("update target set token=:token where account=:account and device=:device")
-                    .bind(target).executeUpdate().getResult() == 1;
+            connection.createQuery("update target set token=:token where account=:account and device=:device")
+                    .bind(target).executeUpdate();
+            return true;
         }
     }
 
