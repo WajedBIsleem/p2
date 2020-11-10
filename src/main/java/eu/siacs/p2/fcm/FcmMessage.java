@@ -9,11 +9,10 @@ public class FcmMessage {
     public final String to;
     public final Data data;
     public final Notification notification;
-    public final String wajed;
 
     public FcmMessage(String to, String sender, MessageBody body) {
         this.to = to;
-        this.wajed = "wajed";
+        
         VCardService vCardService = new VCardService();
         String senderName = vCardService.vcard(sender);
 
@@ -25,23 +24,22 @@ public class FcmMessage {
 
 class Data {
     String title = "New message";
-
-    public Data(String sender, String senderName, MessageBody body) {
-
-    }
-}
-
-class Notification {
-    String title = "New message";
-    String body = "New message";
-    String sound = "default";
-    int badge = 1;
     String senderId = "";
     @SerializedName("content-available")
     int contentavailable = 1;
 
-    public Notification(String sender, String senderName, MessageBody messagebody) {
+    public Data(String sender, String senderName, MessageBody body) {
         senderId = sender;
+    }
+}
+
+class Notification {
+    String title;
+    String body;
+    String sound = "default";
+    int badge = 1;
+
+    public Notification(String sender, String senderName, MessageBody messagebody) {
         title = senderName;
         
         if (messagebody.type.equals("text")) {
