@@ -2,6 +2,7 @@ package eu.siacs.p2.fcm;
 
 import eu.siacs.p2.vcard.VCardService;
 import eu.siacs.p2.xmpp.extensions.push.MessageBody;
+import com.google.gson.annotations.SerializedName;
 
 public class FcmMessage {
 
