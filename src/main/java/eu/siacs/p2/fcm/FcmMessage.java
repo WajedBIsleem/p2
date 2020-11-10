@@ -37,7 +37,7 @@ class Notification {
     String title;
     String body;
     String sound = "default";
-    int badge = 1;
+    int badge = 5;
 
     public Notification(String sender, String senderName, MessageBody messagebody) {
         title = senderName;
