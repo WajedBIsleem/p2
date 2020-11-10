@@ -33,10 +33,11 @@ class Notification {
     String title = "New message";
     String body = "New message";
     String sound = "default";
-    String sender = "";
+    String id = "";
+    int content-available = "1";
 
     public Notification(String sender, String senderName, MessageBody messagebody) {
-        this.sender = sender;
+        id = sender;
         title = senderName;
         
         if (messagebody.type.equals("text")) {
