@@ -64,11 +64,12 @@ public class PushController {
                         if (target.getAccount() != jid.getLocal()) {
                             
                             String messageSender = pushSummary.findValue("last-message-sender");
-
+                            Jid messageSenderJid = Jid.ofEscaped(messageSender);
+                            
                             Gson gson = new Gson();
                             MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
 
-                            if (pushService.push(target, messageSender, messageBody)) {
+                            if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
                                 return iq.createResult();
                             } else {
                                 return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
