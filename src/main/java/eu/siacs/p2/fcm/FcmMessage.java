@@ -9,10 +9,11 @@ public class FcmMessage {
     public final String to;
     public final Data data;
     public final Notification notification;
+    public final String wajed;
 
     public FcmMessage(String to, String sender, MessageBody body) {
         this.to = to;
-
+        this.wajed = "wajed";
         VCardService vCardService = new VCardService();
         String senderName = vCardService.vcard(sender);
 
