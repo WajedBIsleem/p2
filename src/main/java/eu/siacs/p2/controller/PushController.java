@@ -68,7 +68,7 @@ public class PushController {
                             Gson gson = new Gson();
                             MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
 
-                            if (pushService.push(target, messageSender, messageBody)) {
+                            if (pushService.push(target, jid.getLocal(), messageBody)) {
                                 return iq.createResult();
                             } else {
                                 return iq.createError(Condition.RECIPIENT_UNAVAILABLE);

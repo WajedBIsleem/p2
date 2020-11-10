@@ -34,13 +34,13 @@ class Notification {
     String title = "New message";
     String body = "New message";
     String sound = "default";
-    String id = "";
-
+    int badge = 1;
+    String senderId = "";
     @SerializedName("content-available")
     int contentavailable = 1;
 
     public Notification(String sender, String senderName, MessageBody messagebody) {
-        id = sender;
+        senderId = sender;
         title = senderName;
         
         if (messagebody.type.equals("text")) {
