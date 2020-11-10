@@ -34,7 +34,9 @@ class Notification {
     String body = "New message";
     String sound = "default";
     String id = "";
-    int content-available = "1";
+
+    @SerializedName("content-available")
+    int contentavailable = "1";
 
     public Notification(String sender, String senderName, MessageBody messagebody) {
         id = sender;
