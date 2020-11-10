@@ -36,7 +36,7 @@ class Notification {
     String id = "";
 
     @SerializedName("content-available")
-    int contentavailable = "1";
+    int contentavailable = 1;
 
     public Notification(String sender, String senderName, MessageBody messagebody) {
         id = sender;
