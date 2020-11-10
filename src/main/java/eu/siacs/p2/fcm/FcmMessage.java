@@ -24,12 +24,12 @@ public class FcmMessage {
 
 class Data {
     String title = "New message";
-    String senderId = "";
+    String sender = "";
     @SerializedName("content-available")
     int contentavailable = 1;
 
     public Data(String sender, String senderName, MessageBody body) {
-        senderId = sender;
+        this.sender = sender;
     }
 }
 
