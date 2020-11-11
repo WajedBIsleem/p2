@@ -13,7 +13,7 @@ public class VCardService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VCardService.class);
 
-    private static final String BASE_URL = "https://app.punkapnda.live";
+    private static final String BASE_URL = "https://app.zyou.today";
 
     private final VCardHttpInterface httpInterface;
 
