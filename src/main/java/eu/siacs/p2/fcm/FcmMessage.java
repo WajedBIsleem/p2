@@ -11,14 +11,14 @@ public class FcmMessage {
     public final Data data;
     public final Notification notification;
 
-    public FcmMessage(String to, String sender, MessageBody body) {
+    public FcmMessage(String to, String sender, String recevier, MessageBody body) {
         this.to = to;
         
         VCardService vCardService = new VCardService();
         String senderName = vCardService.vcard(sender);
 
         OfflineService offlineService = new OfflineService();
-        int offlineCount = offlineService.offline(sender);
+        int offlineCount = offlineService.offline(recevier);
 
         this.data = new Data(sender);
         this.notification = new Notification(senderName, body, offlineCount);
