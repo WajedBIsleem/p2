@@ -44,8 +44,8 @@ class Notification {
     int badge= 1;
 
     public Notification(String senderName, MessageBody messagebody, int offlineCount) {
-        title = senderName + offlineCount;
-        badge = 10;
+        title = senderName;
+        badge = offlineCount;
         if (messagebody.type.equals("text")) {
             body = messagebody.content;
         } else if (messagebody.type.equals("image")) {
