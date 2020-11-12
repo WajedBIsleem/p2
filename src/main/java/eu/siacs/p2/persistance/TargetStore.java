@@ -72,7 +72,7 @@ public class TargetStore {
     public Target find(Service service, String account, String device) {
         try (Connection connection = database.open()) {
             return connection.createQuery(
-                    "select service,device,domain,token,node,secret from target where service=:service and account=:account and device=:device")
+                    "select service,account,device,domain,token,node,secret from target where service=:service and account=:account and device=:device")
                     .addParameter("service", service).addParameter("account", account).addParameter("device", device)
                     .executeAndFetchFirst(Target.class);
         }
@@ -80,11 +80,6 @@ public class TargetStore {
 
     public boolean update(Target target) {
         try (Connection connection = database.open()) {
-            
-            connection.createQuery(
-                "INSERT INTO target (service,account,device,domain,token,node,secret) VALUES(:service,:account,:device,:domain,:token,:node,:secret)")
-                .bind(target).executeUpdate();
-
             return connection.createQuery("update target set token=:token where account=:account and device=:device").bind(target).executeUpdate().getResult() == 1;
         }
     }
