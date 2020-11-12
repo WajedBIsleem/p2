@@ -81,9 +81,12 @@ public class TargetStore {
     public boolean update(Target target) {
         try (Connection connection = database.open()) {
             
-            connection.createQuery("update target set token=:token where account=:account and device=:device")
+            connection.createQuery(
+                "INSERT INTO target (service,account,device,domain,token,node,secret) VALUES(:service,:account,:device,:domain,:token,:node,:secret)")
+                .bind(target).executeUpdate();
+                
+            return connection.createQuery("update target set token=:token where account=:account and device=:device")
                     .bind(target).executeUpdate();
-             true;
         }
     }
 
