@@ -13,7 +13,7 @@ public class OfflineService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OfflineService.class);
 
-    private static final String BASE_URL = "https://app.zyou.today";
+    private static final String BASE_URL = "https://app.hony.us";
 
     private final OfflineHttpInterface httpInterface;
 
