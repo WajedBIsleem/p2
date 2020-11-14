@@ -35,7 +35,7 @@ public class PushyPushService implements PushService {
 
     @Override
     public boolean push(Target target, String sender, MessageBody body) {
-        final PushyMessage message = new PushyMessage(target.getToken(), sender, body);
+        final PushyMessage message = new PushyMessage(target.getToken(), sender, target.getAccount(), body);
         if (!body.type.equals("update"))
             return push(message);
         else

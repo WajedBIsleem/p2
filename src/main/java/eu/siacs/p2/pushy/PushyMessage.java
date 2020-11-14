@@ -8,35 +8,40 @@ public class PushyMessage {
     public final Data data;
     public final Notification notification;
 
-    public PushyMessage(String to, String sender, MessageBody body) {
+    public PushyMessage(String to, String sender, String recevier, MessageBody body) {
         this.to = to;
-
+        
         VCardService vCardService = new VCardService();
         String senderName = vCardService.vcard(sender);
 
-        this.data = new Data(sender, senderName, body);
-        this.notification = new Notification(sender, senderName, body);
+        OfflineService offlineService = new OfflineService();
+        int offlineCount = offlineService.offline(recevier);
+
+        this.data = new Data(sender);
+        this.notification = new Notification(senderName, body, offlineCount);
     }
 }
 
 class Data {
     String title = "New message";
+    String sender = "";
+    @SerializedName("content-available")
+    int contentavailable = 1;
 
-    public Data(String sender, String senderName, MessageBody body) {
-
+    public Data(String sender) {
+        this.sender = sender;
     }
 }
 
 class Notification {
-    String title = "New message";
-    String body = "New message";
+    String title;
+    String body;
     String sound = "default";
-    String sender = "";
+    int badge= 1;
 
-    public Notification(String sender, String senderName, MessageBody messagebody) {
-        this.sender = sender;
+    public Notification(String senderName, MessageBody messagebody, int offlineCount) {
         title = senderName;
-        
+        badge = offlineCount;
         if (messagebody.type.equals("text")) {
             body = messagebody.content;
         } else if (messagebody.type.equals("image")) {
