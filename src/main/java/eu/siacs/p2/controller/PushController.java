@@ -3,6 +3,7 @@ package eu.siacs.p2.controller;
 import eu.siacs.p2.Configuration;
 import eu.siacs.p2.PushService;
 import eu.siacs.p2.PushServiceManager;
+import eu.siacs.p2.Utils;
 import eu.siacs.p2.persistance.TargetStore;
 import eu.siacs.p2.pojo.Service;
 import eu.siacs.p2.pojo.Target;
@@ -27,6 +28,7 @@ public class PushController {
     private static final String COMMAND_NODE_UNREGISTER_PREFIX = "unregister-push-";
 
     public static IQHandler commandHandler = (iq -> {
+        Utils.log("commandHandler");
         final Command command = iq.getExtension(Command.class);
         if (command != null && command.getAction() == Command.Action.EXECUTE) {
             final String node = command.getNode();
@@ -39,6 +41,7 @@ public class PushController {
         return iq.createError(Condition.BAD_REQUEST);
     });
     public static IQHandler pubsubHandler = (iq -> {
+        Utils.log("pubsubHandler");
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
             final PubSub.Publish publish = pubSub.getPublish();
