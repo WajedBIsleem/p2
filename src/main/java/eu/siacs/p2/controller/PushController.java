@@ -28,7 +28,6 @@ public class PushController {
     private static final String COMMAND_NODE_UNREGISTER_PREFIX = "unregister-push-";
 
     public static IQHandler commandHandler = (iq -> {
-        Utils.log("commandHandler");
         final Command command = iq.getExtension(Command.class);
         if (command != null && command.getAction() == Command.Action.EXECUTE) {
             final String node = command.getNode();
@@ -41,7 +40,6 @@ public class PushController {
         return iq.createError(Condition.BAD_REQUEST);
     });
     public static IQHandler pubsubHandler = (iq -> {
-        Utils.log("pubsubHandler");
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
             final PubSub.Publish publish = pubSub.getPublish();

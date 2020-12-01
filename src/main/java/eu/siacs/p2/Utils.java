@@ -23,21 +23,21 @@ public class Utils {
         return DigestUtils.sha1Hex(Arrays.stream(parts).collect(Collectors.joining("\00")));
     }
 
-    public static void log(String log) {
-        try {
-            File myObj = new File("log.txt");
-            if (!myObj.exists()) {
-                myObj.createNewFile();
-            }
-            if (myObj.exists()) {
-                FileWriter myWriter = new FileWriter(myObj);
-                myWriter.write("\n");
-                myWriter.write(log);
-                myWriter.close();
-            }
-        } catch (Exception e) {
-        }
-    }
+    // public static void log(String log) {
+    //     try {
+    //         File myObj = new File("log.txt");
+    //         if (!myObj.exists()) {
+    //             myObj.createNewFile();
+    //         }
+    //         if (myObj.exists()) {
+    //             FileWriter myWriter = new FileWriter(myObj);
+    //             myWriter.write("\n");
+    //             myWriter.write(log);
+    //             myWriter.close();
+    //         }
+    //     } catch (Exception e) {
+    //     }
+    // }
 
     static void sleep(long interval) {
         try {
