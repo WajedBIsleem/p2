@@ -20,25 +20,24 @@ public class Utils {
     }
 
     public static void log(String log) {
-        System.out.println("wajed : " + log);
-        // try {
-        //     File myObj = new File("log.txt");
-        //     if (!myObj.exists()) {
-        //         System.out.print("file does not exists");
-        //         myObj.createNewFile();
-        //         System.out.print(myObj.getAbsolutePath());
-        //     }
-        //     if (myObj.exists()) {
-        //         System.out.print("file exists");
-        //         FileWriter myWriter = new FileWriter(myObj);
-        //         myWriter.write("\n");
-        //         myWriter.write(log);
-        //         System.out.print("file path : " + myObj.getAbsolutePath());
-        //         myWriter.close();
-        //     }
-        // } catch (Exception e) {
-        //     System.err.print(e.getMessage());
-        // }
+        try {
+            File myObj = new File("log.txt");
+            if (!myObj.exists()) {
+                System.out.println("file does not exists");
+                myObj.createNewFile();
+                System.out.println(myObj.getAbsolutePath());
+            }
+            if (myObj.exists()) {
+                System.out.println("file exists");
+                FileWriter myWriter = new FileWriter(myObj);
+                myWriter.write("\n");
+                myWriter.write(log);
+                System.out.println("file path : " + myObj.getAbsolutePath());
+                myWriter.close();
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     static void sleep(long interval) {

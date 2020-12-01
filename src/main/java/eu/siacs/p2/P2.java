@@ -31,6 +31,7 @@ public class P2 {
     }
 
     public static void main(String... args) {
+        Utils.log("Wajed1");
         try {
             main(new DefaultParser().parse(options, args));
         } catch (ParseException e) {
@@ -39,6 +40,7 @@ public class P2 {
     }
 
     private static void main(CommandLine commandLine) {
+        Utils.log("Wajed1");
         String config = commandLine.getOptionValue('c');
         if (config != null) {
             try {
