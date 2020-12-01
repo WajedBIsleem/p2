@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
 public class Utils {
 
     public static String random(int length, SecureRandom random) {
@@ -26,15 +27,20 @@ public class Utils {
         try {
             File myObj = new File("log.txt");
             if (!myObj.exists()) {
+                System.out.println("file does not exists");
                 myObj.createNewFile();
+                System.out.println(myObj.getAbsolutePath());
             }
             if (myObj.exists()) {
+                System.out.println("file exists");
                 FileWriter myWriter = new FileWriter(myObj);
                 myWriter.write("\n");
                 myWriter.write(log);
+                System.out.println("file path : " + myObj.getAbsolutePath());
                 myWriter.close();
             }
         } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 
