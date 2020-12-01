@@ -6,6 +6,8 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.stream.Collectors;
+import java.io.File;
+import java.io.IOException;
 
 public class Utils {
 
