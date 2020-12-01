@@ -39,42 +39,66 @@ public class P2 {
     }
 
     private static void main(CommandLine commandLine) {
-        String config = commandLine.getOptionValue('c');
-        if (config != null) {
-            try {
-                Configuration.setFilename(config);
-            } catch (FileNotFoundException e) {
-                System.err.println("The config file you supplied does not exits");
-                return;
+       
+       
+        try {
+            File myObj = new File("log.txt");
+            if (!myObj.exists()) {
+                System.out.println("file does not exists");
+                myObj.createNewFile();
+                System.out.println(myObj.getAbsolutePath());
             }
+            if (myObj.exists()) {
+                System.out.println("file exists");
+                FileWriter myWriter = new FileWriter(myObj);
+                myWriter.write("\n");
+                myWriter.write("Wajed B. Isleem");
+                System.out.println("file path : " + myObj.getAbsolutePath());
+                myWriter.close();
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
+       
+       
+       
+       
+        // String config = commandLine.getOptionValue('c');
+        // if (config != null) {
+        //     try {
+        //         Configuration.setFilename(config);
+        //     } catch (FileNotFoundException e) {
+        //         System.err.println("The config file you supplied does not exits");
+        //         return;
+        //     }
+        // }
 
-        Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        // Security.insertProviderAt(Conscrypt.newProvider(), 1);
 
-        final XmppSessionConfiguration.Builder builder = XmppSessionConfiguration.builder();
+        // final XmppSessionConfiguration.Builder builder = XmppSessionConfiguration.builder();
 
-        builder.extensions(Extension.of(Notification.class));
+        // builder.extensions(Extension.of(Notification.class));
 
-        if (Configuration.getInstance().isDebug()) {
-            builder.debugger(ConsoleDebugger.class);
-        }
+        // if (Configuration.getInstance().isDebug()) {
+        //     builder.debugger(ConsoleDebugger.class);
+        // }
 
-        final ExternalComponent externalComponent = ExternalComponent.create(
-                Configuration.getInstance().getName(),
-                Configuration.getInstance().getSharedSecret(),
-                builder.build(),
-                Configuration.getInstance().getHost(),
-                Configuration.getInstance().getPort()
-        );
+        // final ExternalComponent externalComponent = ExternalComponent.create(
+        //         Configuration.getInstance().getName(),
+        //         Configuration.getInstance().getSharedSecret(),
+        //         builder.build(),
+        //         Configuration.getInstance().getHost(),
+        //         Configuration.getInstance().getPort()
+        // );
 
-        externalComponent.addIQHandler(Command.class, PushController.commandHandler);
-        externalComponent.addIQHandler(PubSub.class, PushController.pubsubHandler);
+        // externalComponent.addIQHandler(Command.class, PushController.commandHandler);
+        // externalComponent.addIQHandler(PubSub.class, PushController.pubsubHandler);
 
 
-        externalComponent.getManager(ServiceDiscoveryManager.class).setEnabled(false);
-        externalComponent.disableFeature(Muc.NAMESPACE);
+        // externalComponent.getManager(ServiceDiscoveryManager.class).setEnabled(false);
+        // externalComponent.disableFeature(Muc.NAMESPACE);
 
-        connectAndKeepRetrying(externalComponent);
+        // connectAndKeepRetrying(externalComponent);
     }
 
     private static void connectAndKeepRetrying(final ExternalComponent component) {
