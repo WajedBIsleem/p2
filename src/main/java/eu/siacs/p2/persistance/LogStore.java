@@ -50,12 +50,11 @@ public class LogStore {
     }
 
     public void create(String account, String device, String details) {
-            try (Connection connection = database.open()) {
-                connection.createQuery(
-                        "INSERT INTO log (account,device,details,created_at) VALUES(:account,:device,:details,now())")
-                        .addParameter("account", account).addParameter("device", device).addParameter("details", details)
-                        .executeUpdate();
-            }
+        try (Connection connection = database.open()) {
+            connection.createQuery(
+                    "INSERT INTO log (account,device,details,created_at) VALUES(:account,:device,:details,now())")
+                    .addParameter("account", account).addParameter("device", device).addParameter("details", details)
+                    .executeUpdate();
         }
     }
 }
