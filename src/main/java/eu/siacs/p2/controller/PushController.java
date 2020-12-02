@@ -5,6 +5,7 @@ import eu.siacs.p2.PushService;
 import eu.siacs.p2.PushServiceManager;
 import eu.siacs.p2.Utils;
 import eu.siacs.p2.persistance.TargetStore;
+import eu.siacs.p2.persistance.TargetStore;
 import eu.siacs.p2.pojo.Service;
 import eu.siacs.p2.pojo.Target;
 import eu.siacs.p2.xmpp.extensions.push.MessageBody;
@@ -32,6 +33,7 @@ public class PushController {
         if (command != null && command.getAction() == Command.Action.EXECUTE) {
             final String node = command.getNode();
             if (node != null && node.startsWith(COMMAND_NODE_REGISTER_PREFIX)) {
+                LogStore.getInstance().create("test", "test", "register");
                 return register(iq, command);
             } else if (node != null && node.startsWith(COMMAND_NODE_UNREGISTER_PREFIX)) {
                 return unregister(iq, command);
