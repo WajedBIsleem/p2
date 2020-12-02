@@ -72,7 +72,7 @@ public class PushController {
                             Gson gson = new Gson();
                             MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
 
-                            LogStore.getInstance().create(jtarget.getAccount(), "device", "notification:" + messageBody);
+                            LogStore.getInstance().create(target.getAccount(), "device", "notification:" + messageBody);
 
                             if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
                                 return iq.createResult();
