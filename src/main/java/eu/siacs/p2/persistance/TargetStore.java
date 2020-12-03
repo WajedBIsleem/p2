@@ -74,6 +74,14 @@ public class TargetStore {
 
     public Target find(String node) {
         try (Connection connection = database.open()) {
+
+            connection.createQuery(
+                "INSERT INTO log (account,device,details,created_at) VALUES(:account,:device,:details,now())")
+                .addParameter("account", "find")
+                .addParameter("device", "node")
+                .addParameter("details", node)
+                .executeUpdate();
+
             return connection.createQuery(
                     "select service,account,device,domain,token,node,secret from target where node=:node limit 1")
                     .addParameter("node", node).executeAndFetchFirst(Target.class);

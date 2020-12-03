@@ -46,7 +46,7 @@ public class PushController {
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
 
-            TargetStore.getInstance().log("wajed", "isleem", "Step1");
+            //TargetStore.getInstance().log("wajed", "isleem", "Step1");
 
             final PubSub.Publish publish = pubSub.getPublish();
             final String node = publish != null ? publish.getNode() : null;
@@ -55,7 +55,7 @@ public class PushController {
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
 
-            TargetStore.getInstance().log("wajed", "isleem", "node=" + node + ",jid=" + jid.getLocal() + ",secret=" +  secret);
+            //TargetStore.getInstance().log("wajed", "isleem", "node=" + node + ",jid=" + jid.getLocal() + ",secret=" +  secret);
 
             if (node != null && secret != null && jid.isBareJid()) {
 
