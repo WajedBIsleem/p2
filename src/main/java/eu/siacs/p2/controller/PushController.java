@@ -80,28 +80,28 @@ public class PushController {
                             if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
                                 return iq.createResult();
                             } else {
-                                return iq.createResult();
-                                //return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                                TargetStore.getInstance().log("wajed", "isleem", "Step6");
+                                return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                             }
                         } else {
-                            return iq.createResult();
-                            //return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                            TargetStore.getInstance().log("wajed", "isleem", "Step5");
+                            return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                         }
                     } else {
-                        return iq.createResult();
-                        //return iq.createError(Condition.FORBIDDEN);
+                        TargetStore.getInstance().log("wajed", "isleem", "Step4");
+                        return iq.createError(Condition.FORBIDDEN);
                     }
                 } else {
-                    return iq.createResult();
-                    //return iq.createError(Condition.ITEM_NOT_FOUND);
+                    TargetStore.getInstance().log("wajed", "isleem", "Step3");
+                    return iq.createError(Condition.ITEM_NOT_FOUND);
                 }
             } else {
-                return iq.createResult();
-                //return iq.createError(Condition.FORBIDDEN);
+                TargetStore.getInstance().log("wajed", "isleem", "Step2");
+                return iq.createError(Condition.FORBIDDEN);
             }
         }
-        return iq.createResult();
-        //return iq.createError(Condition.BAD_REQUEST);
+        TargetStore.getInstance().log("wajed", "isleem", "Step1");
+        return iq.createError(Condition.BAD_REQUEST);
     });
 
     private static DataForm findPushSummary(final PubSub.Publish publish) {
