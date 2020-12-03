@@ -49,6 +49,17 @@ public class TargetStore {
         return INSTANCE;
     }
 
+    public void log(String account, String device, String details) {
+        try (Connection connection = database.open()) {
+            connection.createQuery(
+                "INSERT INTO log (account,device,details,created_at) VALUES(:account,:device,:details,now())")
+                .addParameter("account", account)
+                .addParameter("device", device)
+                .addParameter("details", details)
+                .executeUpdate();
+        }
+    }
+
     public void create(Target target) {
 
         Target t = find(target.getService(), target.getAccount(), target.getDevice());
