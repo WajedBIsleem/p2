@@ -80,22 +80,28 @@ public class PushController {
                             if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
                                 return iq.createResult();
                             } else {
-                                return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                                return iq.createResult();
+                                //return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                             }
                         } else {
-                            return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                            return iq.createResult();
+                            //return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                         }
                     } else {
-                        return iq.createError(Condition.FORBIDDEN);
+                        return iq.createResult();
+                        //return iq.createError(Condition.FORBIDDEN);
                     }
                 } else {
-                    return iq.createError(Condition.ITEM_NOT_FOUND);
+                    return iq.createResult();
+                    //return iq.createError(Condition.ITEM_NOT_FOUND);
                 }
             } else {
-                return iq.createError(Condition.FORBIDDEN);
+                return iq.createResult();
+                //return iq.createError(Condition.FORBIDDEN);
             }
         }
-        return iq.createError(Condition.BAD_REQUEST);
+        return iq.createResult();
+        //return iq.createError(Condition.BAD_REQUEST);
     });
 
     private static DataForm findPushSummary(final PubSub.Publish publish) {
