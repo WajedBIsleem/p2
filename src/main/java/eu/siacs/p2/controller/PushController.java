@@ -5,7 +5,6 @@ import eu.siacs.p2.PushService;
 import eu.siacs.p2.PushServiceManager;
 import eu.siacs.p2.Utils;
 import eu.siacs.p2.persistance.TargetStore;
-import eu.siacs.p2.persistance.LogStore;
 import eu.siacs.p2.pojo.Service;
 import eu.siacs.p2.pojo.Target;
 import eu.siacs.p2.xmpp.extensions.push.MessageBody;
@@ -33,7 +32,6 @@ public class PushController {
         if (command != null && command.getAction() == Command.Action.EXECUTE) {
             final String node = command.getNode();
             if (node != null && node.startsWith(COMMAND_NODE_REGISTER_PREFIX)) {
-                LogStore.getInstance().create("test", "test", "register");
                 return register(iq, command);
             } else if (node != null && node.startsWith(COMMAND_NODE_UNREGISTER_PREFIX)) {
                 return unregister(iq, command);
@@ -42,11 +40,6 @@ public class PushController {
         return iq.createError(Condition.BAD_REQUEST);
     });
     public static IQHandler pubsubHandler = (iq -> {
-        
-        
-        LogStore.getInstance().create("wajed", "device", "notification");
-
-
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
             final PubSub.Publish publish = pubSub.getPublish();
@@ -76,8 +69,6 @@ public class PushController {
                             
                             Gson gson = new Gson();
                             MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
-
-                            LogStore.getInstance().create(target.getAccount(), "device", "notification:" + messageBody.content);
 
                             if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
                                 return iq.createResult();
