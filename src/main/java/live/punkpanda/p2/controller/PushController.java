@@ -41,7 +41,19 @@ public class PushController {
 
     public static IQHandler pubsubHandler = (iq -> {
         
+        TargetStore.getInstance().log("Step1", "Step1", iq.getId());
+
+
+        final PubSub pubSub = iq.getExtension(PubSub.class);
         TargetStore.getInstance().log("pubsubHandler", "Step1", iq.getId());
+
+
+
+
+
+
+
+
         return iq.createResult();
 
         // final PubSub pubSub = iq.getExtension(PubSub.class);
