@@ -14,7 +14,6 @@ import rocks.xmpp.core.stanza.model.IQ;
 import rocks.xmpp.core.stanza.model.errors.Condition;
 import rocks.xmpp.extensions.commands.model.Command;
 import rocks.xmpp.extensions.data.model.DataForm;
-import rocks.xmpp.extensions.data.model.DataForm.Field;
 import rocks.xmpp.extensions.pubsub.model.Item;
 import rocks.xmpp.extensions.pubsub.model.PubSub;
 
@@ -41,144 +40,71 @@ public class PushController {
     });
 
     public static IQHandler pubsubHandler = (iq -> {
-
-        TargetStore.getInstance().log("Step1", iq.getType().toString());
-
         final PubSub pubSub = iq.getExtension(PubSub.class);
-
-        // TargetStore.getInstance().log("Step2", "pubSub : " + pubSub != null ? "true":
-        // "false");
-
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
+
             final PubSub.Publish publish = pubSub.getPublish();
-            // TargetStore.getInstance().log("Step3", "publish : " + publish.getNode());
-
             final String node = publish != null ? publish.getNode() : null;
-            // TargetStore.getInstance().log("Step4", "node : " + node);
-
             final Jid jid = iq.getFrom();
-            // TargetStore.getInstance().log("Step5", "jid : " + jid.toEscapedString());
-
             final DataForm publishOptions = pubSub.getPublishOptions();
-            // TargetStore.getInstance().log("Step6", "publishOptions : " + publishOptions
-            // != null ? "true": "false");
-
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
-            // TargetStore.getInstance().log("Step7", "secret : " + secret);
+            final DataForm pushSummary = findPushSummary(publish);
 
-            final Item item = publish == null ? null : publish.getItem();
-            // TargetStore.getInstance().log("Step8", "item : " + item != null ? "true":
-            // "false");
+            if (node != null && secret != null && jid.isBareJid()) {
 
-            final Object payload = item == null ? null : item.getPayload();
-            // TargetStore.getInstance().log("Step9", "payload : " + payload != null ?
-            // "true": "false");
+                final Target target = TargetStore.getInstance().find(node);
+                if (target != null) {
+                    if (secret.equals(target.getSecret())) {
+                        final PushService pushService;
+                        try {
+                            pushService = PushServiceManager.getPushServiceInstance(target.getService());
+                        } catch (IllegalStateException e) {
+                            e.printStackTrace();
+                            return iq.createError(Condition.INTERNAL_SERVER_ERROR);
+                        }
 
-            if (payload instanceof Notification) {
-                // TargetStore.getInstance().log("Step10", "payload is instanceof
-                // Notification");
+                        if (pushSummary != null) {
 
-                DataForm pushSummary = ((Notification) payload).getPushSummary();
-                // TargetStore.getInstance().log("Step11", "data : " + data != null ? "true":
-                // "false");
+                            if (target.getAccount() != jid.getLocal()) {
 
-                try {
+                                String messageSender = pushSummary.findValue("last-message-sender");
+                                Jid messageSenderJid = Jid.ofEscaped(messageSender);
 
-                    TargetStore.getInstance().log("Step2", "pushSummary : " + (pushSummary != null ? "true" : "false"));
-                    if (pushSummary != null) {
-                        TargetStore.getInstance().log("Step3", "ok1");
-                        String formType = pushSummary.getFormType();
-                        int count = pushSummary.getFields().size();
-                        TargetStore.getInstance().log("Step3", "ok2: " + formType + ", count=" + count);
+                                Gson gson = new Gson();
+                                MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"),
+                                        MessageBody.class);
 
+                                if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
+                                    return iq.createResult();
+                                } else {
+                                    return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                                }
+                            } else {
+                                return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                            }
+
+                        } else {
+
+                            //Group message
+                            if (pushService.push(target, "", null)) {
+                                return iq.createResult();
+                            } else {
+                                return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                            }
+
+                        }
+
+                    } else {
+                        return iq.createError(Condition.FORBIDDEN);
                     }
-                    // List<Field> fields = pushSummary.getFields();
-
-                    // for (Field field : fields) {
-                    // TargetStore.getInstance().log("Step13", "field : " + field.toString());
-                    // }
-
-                    // String messageSender = pushSummary.findValue("last-message-sender");
-                    // String messageBody = pushSummary.findValue("last-message-body");
-
-                    // TargetStore.getInstance().log("Step12",
-                    // "messageSender : " + messageSender + ", messageBody" + messageBody);
-                } catch (Exception e) {
-                    TargetStore.getInstance().log("error", "error : " + e.getMessage());
+                } else {
+                    return iq.createError(Condition.ITEM_NOT_FOUND);
                 }
-
+            } else {
+                return iq.createError(Condition.FORBIDDEN);
             }
         }
-
-        return iq.createResult();
-
-        // final PubSub pubSub = iq.getExtension(PubSub.class);
-        // if (pubSub != null && iq.getType() == IQ.Type.SET) {
-
-        // TargetStore.getInstance().log("wajed", "pubsubHandler", "Step2");
-
-        // final PubSub.Publish publish = pubSub.getPublish();
-        // final String node = publish != null ? publish.getNode() : null;
-        // final Jid jid = iq.getFrom();
-        // final DataForm publishOptions = pubSub.getPublishOptions();
-        // final String secret = publishOptions != null ?
-        // publishOptions.findValue("secret") : null;
-        // final DataForm pushSummary = findPushSummary(publish);
-
-        // if (node != null && secret != null && jid.isBareJid()) {
-
-        // final Target target = TargetStore.getInstance().find(node);
-
-        // if (target != null) {
-        // if (secret.equals(target.getSecret())) {
-        // final PushService pushService;
-        // try {
-        // pushService = PushServiceManager.getPushServiceInstance(target.getService());
-        // } catch (IllegalStateException e) {
-        // TargetStore.getInstance().log("wajed", "isleem", "Step8");
-        // e.printStackTrace();
-        // return iq.createError(Condition.INTERNAL_SERVER_ERROR);
-        // }
-
-        // try {
-        // if (target.getAccount() != jid.getLocal()) {
-
-        // String messageSender = pushSummary.findValue("last-message-sender");
-        // Jid messageSenderJid = Jid.ofEscaped(messageSender);
-
-        // Gson gson = new Gson();
-        // MessageBody messageBody =
-        // gson.fromJson(pushSummary.findValue("last-message-body"),
-        // MessageBody.class);
-
-        // if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
-        // TargetStore.getInstance().log("wajed", "isleem", "Step7");
-        // return iq.createResult();
-        // } else {
-        // TargetStore.getInstance().log("wajed", "isleem", "Step6");
-        // return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
-        // }
-        // } else {
-        // TargetStore.getInstance().log("wajed", "isleem", "Step5");
-        // return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
-        // }
-        // } catch (Exception e) {
-        // TargetStore.getInstance().log("wajed", "error", e.getMessage());
-        // }
-        // } else {
-        // TargetStore.getInstance().log("wajed", "isleem", "Step4");
-        // return iq.createError(Condition.FORBIDDEN);
-        // }
-        // } else {
-        // return iq.createError(Condition.ITEM_NOT_FOUND);
-        // }
-        // } else {
-        // TargetStore.getInstance().log("wajed", "isleem", "Step2");
-        // return iq.createError(Condition.FORBIDDEN);
-        // }
-        // }
-        // TargetStore.getInstance().log("wajed", "isleem", "Step1");
-        // return iq.createError(Condition.BAD_REQUEST);
+        return iq.createError(Condition.BAD_REQUEST);
     });
 
     private static DataForm findPushSummary(final PubSub.Publish publish) {
