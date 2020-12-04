@@ -64,6 +64,7 @@ public class PushController {
                         try {
                             pushService = PushServiceManager.getPushServiceInstance(target.getService());
                         } catch (IllegalStateException e) {
+                            TargetStore.getInstance().log("wajed", "isleem", "Step8");
                             e.printStackTrace();
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
@@ -76,6 +77,7 @@ public class PushController {
                             MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
 
                             if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
+                                TargetStore.getInstance().log("wajed", "isleem", "Step7");
                                 return iq.createResult();
                             } else {
                                 TargetStore.getInstance().log("wajed", "isleem", "Step6");
