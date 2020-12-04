@@ -41,10 +41,28 @@ public class PushController {
 
     public static IQHandler pubsubHandler = (iq -> {
         
-        TargetStore.getInstance().log("Step1", iq.getId());
+        TargetStore.getInstance().log("Step1", iq.getType().toString());
+        
         final PubSub pubSub = iq.getExtension(PubSub.class);
-        TargetStore.getInstance().log("Step2", "pubSub");
 
+        TargetStore.getInstance().log("Step2", "pubSub : " + pubSub != null ? "true": "false");
+
+        if (pubSub != null && iq.getType() == IQ.Type.SET) {
+            final PubSub.Publish publish = pubSub.getPublish();
+            TargetStore.getInstance().log("Step3", "publish : " + publish.getNode());
+
+            final String node = publish != null ? publish.getNode() : null;
+            TargetStore.getInstance().log("Step4", "node : " + node);
+
+            final Jid jid = iq.getFrom();
+            TargetStore.getInstance().log("Step5", "jid : " + jid.toEscapedString());
+
+            final DataForm publishOptions = pubSub.getPublishOptions();
+            TargetStore.getInstance().log("Step6", "publishOptions : " + publishOptions != null ? "true": "false");
+
+            final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
+            TargetStore.getInstance().log("Step7", "secret : " + secret);
+        }
 
 
         return iq.createResult();
