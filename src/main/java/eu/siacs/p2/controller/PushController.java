@@ -48,8 +48,7 @@ public class PushController {
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
 
-            
-            if (node != null && secret != null && jid.isBareJid()) {
+            if (node != null && secret != null) {
 
                 final Target target = TargetStore.getInstance().find(node);
                 if (target != null) {
@@ -61,21 +60,33 @@ public class PushController {
                             e.printStackTrace();
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
-                        if (target.getAccount() != jid.getLocal()) {
-                            
-                            String messageSender = pushSummary.findValue("last-message-sender");
-                            Jid messageSenderJid = Jid.ofEscaped(messageSender);
-                            
-                            Gson gson = new Gson();
-                            MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
 
-                            if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
-                                return iq.createResult();
+                        if (pushSummary != null) {
+
+                            if (target.getAccount() != jid.getLocal()) {
+
+                                String messageSender = pushSummary.findValue("last-message-sender");
+                                Jid messageSenderJid = Jid.ofEscaped(messageSender);
+
+                                Gson gson = new Gson();
+                                MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"),
+                                        MessageBody.class);
+
+                                if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
+                                    return iq.createResult();
+                                } else {
+                                    return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                                }
                             } else {
                                 return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                             }
                         } else {
-                            return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                            // Group message
+                            if (pushService.push(target, "", null)) {
+                                return iq.createResult();
+                            } else {
+                                return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                            }
                         }
                     } else {
                         return iq.createError(Condition.FORBIDDEN);
