@@ -41,9 +41,7 @@ public class PushController {
     });
 
     public static IQHandler pubsubHandler = (iq -> {
-
-        TargetStore.getInstance().log("wajed", "pubsubHandler", "Step1");
-
+        TargetStore.getInstance().log("pubsubHandler", "Step1", iq.toString());
 
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
@@ -115,7 +113,8 @@ public class PushController {
             }
         }
         TargetStore.getInstance().log("wajed", "isleem", "Step1");
-        return iq.createError(Condition.BAD_REQUEST);
+        //return iq.createError(Condition.BAD_REQUEST);
+        return iq.createResult();
     });
 
     private static DataForm findPushSummary(final PubSub.Publish publish) {
