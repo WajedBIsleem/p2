@@ -50,7 +50,7 @@ public class PushController {
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
 
-            if (node != null && secret != null && jid.isBareJid()) {
+            if (node != null && secret != null) {
 
                 final Target target = TargetStore.getInstance().find(node);
                 if (target != null) {
