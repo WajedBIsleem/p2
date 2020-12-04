@@ -84,7 +84,7 @@ public class PushController {
 
                 try {
 
-                    TargetStore.getInstance().log("Step2", "pushSummary : " + pushSummary != null ? "true" : "false");
+                    TargetStore.getInstance().log("Step2", "pushSummary : " + (pushSummary != null ? "true" : "false"));
                     if (pushSummary != null) {
                         TargetStore.getInstance().log("Step3", "ok1");
                         String formType = pushSummary.getFormType();
