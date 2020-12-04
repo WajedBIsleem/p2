@@ -44,7 +44,7 @@ public class PushController {
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
 
-            //TargetStore.getInstance().log("wajed", "isleem", "Step1");
+            // TargetStore.getInstance().log("wajed", "isleem", "Step1");
 
             final PubSub.Publish publish = pubSub.getPublish();
             final String node = publish != null ? publish.getNode() : null;
@@ -53,13 +53,14 @@ public class PushController {
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
 
-            //TargetStore.getInstance().log("wajed", "isleem", "node=" + node + ",jid=" + jid.getLocal() + ",secret=" +  secret);
+            // TargetStore.getInstance().log("wajed", "isleem", "node=" + node + ",jid=" +
+            // jid.getLocal() + ",secret=" + secret);
 
             if (node != null && secret != null && jid.isBareJid()) {
 
                 final Target target = TargetStore.getInstance().find(node);
                 TargetStore.getInstance().log("wajed", "target", target.toString());
-                
+
                 if (target != null) {
                     if (secret.equals(target.getSecret())) {
                         final PushService pushService;
@@ -70,24 +71,30 @@ public class PushController {
                             e.printStackTrace();
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
-                        if (target.getAccount() != jid.getLocal()) {
-                            
-                            String messageSender = pushSummary.findValue("last-message-sender");
-                            Jid messageSenderJid = Jid.ofEscaped(messageSender);
-                            
-                            Gson gson = new Gson();
-                            MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"), MessageBody.class);
 
-                            if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
-                                TargetStore.getInstance().log("wajed", "isleem", "Step7");
-                                return iq.createResult();
+                        try {
+                            if (target.getAccount() != jid.getLocal()) {
+
+                                String messageSender = pushSummary.findValue("last-message-sender");
+                                Jid messageSenderJid = Jid.ofEscaped(messageSender);
+
+                                Gson gson = new Gson();
+                                MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"),
+                                        MessageBody.class);
+
+                                if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
+                                    TargetStore.getInstance().log("wajed", "isleem", "Step7");
+                                    return iq.createResult();
+                                } else {
+                                    TargetStore.getInstance().log("wajed", "isleem", "Step6");
+                                    return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                                }
                             } else {
-                                TargetStore.getInstance().log("wajed", "isleem", "Step6");
+                                TargetStore.getInstance().log("wajed", "isleem", "Step5");
                                 return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                             }
-                        } else {
-                            TargetStore.getInstance().log("wajed", "isleem", "Step5");
-                            return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                        } catch (Exception e) {
+                            TargetStore.getInstance().log("wajed", "error", e.getMessage());
                         }
                     } else {
                         TargetStore.getInstance().log("wajed", "isleem", "Step4");
