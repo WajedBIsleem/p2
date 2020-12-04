@@ -36,10 +36,13 @@ public class FcmPushService implements PushService {
 
     @Override
     public boolean push(Target target, String sender, MessageBody body) {
-        final FcmMessage message = new FcmMessage(target.getToken(), sender, target.getAccount(), body);
-        if (!body.type.equals("update"))
+        TargetStore.getInstance().log("Step9", "Test");
+        final PushyMessage message = new PushyMessage(target.getToken(), sender, target.getAccount(), body);
+        TargetStore.getInstance().log("Step10", "Test");
+        if (body == null || !body.type.equals("update")) {
+            TargetStore.getInstance().log("Step11", "Test");
             return push(message);
-        else
+        } else
             return true;
     }
 
