@@ -84,18 +84,25 @@ public class PushController {
 
                 try {
 
-                    List<Field> fields =  pushSummary.getFields();
+                    TargetStore.getInstance().log("Step2", "pushSummary : " + pushSummary != null ? "true" : "false");
+                    if (pushSummary != null) {
+                        TargetStore.getInstance().log("Step3", "ok1");
+                        String formType = pushSummary.getFormType();
+                        int count = pushSummary.getFields().size();
+                        TargetStore.getInstance().log("Step3", "ok2: " + formType + ", count=" + count);
 
-                    for (Field field : fields) {
-                        TargetStore.getInstance().log("Step13", "field : " + field.toString());
                     }
+                    // List<Field> fields = pushSummary.getFields();
 
+                    // for (Field field : fields) {
+                    // TargetStore.getInstance().log("Step13", "field : " + field.toString());
+                    // }
 
                     // String messageSender = pushSummary.findValue("last-message-sender");
                     // String messageBody = pushSummary.findValue("last-message-body");
 
                     // TargetStore.getInstance().log("Step12",
-                    //         "messageSender : " + messageSender + ", messageBody" + messageBody);
+                    // "messageSender : " + messageSender + ", messageBody" + messageBody);
                 } catch (Exception e) {
                     TargetStore.getInstance().log("error", "error : " + e.getMessage());
                 }
