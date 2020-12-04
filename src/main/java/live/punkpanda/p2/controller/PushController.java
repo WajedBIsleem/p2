@@ -58,6 +58,8 @@ public class PushController {
             if (node != null && secret != null && jid.isBareJid()) {
 
                 final Target target = TargetStore.getInstance().find(node);
+                TargetStore.getInstance().log("wajed", "target", target.toString());
+                
                 if (target != null) {
                     if (secret.equals(target.getSecret())) {
                         final PushService pushService;

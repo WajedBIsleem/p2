@@ -66,4 +66,9 @@ public class Target {
     public String getDomain() {
         return domain;
     }
+
+    @Override
+    public String toString() {
+        return service + " - " + account  + " - "+ device  + " - " + domain  + " - " + token + " - " + node + " - " + secret;
+    }
 }
