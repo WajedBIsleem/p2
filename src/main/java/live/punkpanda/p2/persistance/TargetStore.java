@@ -18,6 +18,7 @@ public class TargetStore {
 
     private static final Map<Class, Converter> CONVERTERS;
     private static final String CREATE_TARGET_TABLE = "create table if not exists target(service char(5), account char(50), device char(40) NOT NULL, domain varchar(253), token varchar(255), node char(12), secret char(24), index nodeDomain (node,domain));";
+    private static final String CREATE_LOG_TABLE = "create table if not exists log(id INT NOT NULL AUTO_INCREMENT, details text, created_at DATETIME, PRIMARY KEY (id));";
     private static TargetStore INSTANCE = null;
 
     static {
@@ -39,6 +40,7 @@ public class TargetStore {
                 quirks);
         try (Connection connection = database.open()) {
             connection.createQuery(CREATE_TARGET_TABLE).executeUpdate();
+            connection.createQuery(CREATE_LOG_TABLE).executeUpdate();
         }
     }
 

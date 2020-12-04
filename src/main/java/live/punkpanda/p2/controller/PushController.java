@@ -3,7 +3,6 @@ package live.punkpanda.p2.controller;
 import live.punkpanda.p2.Configuration;
 import live.punkpanda.p2.PushService;
 import live.punkpanda.p2.PushServiceManager;
-import live.punkpanda.p2.Utils;
 import live.punkpanda.p2.persistance.TargetStore;
 import live.punkpanda.p2.pojo.Service;
 import live.punkpanda.p2.pojo.Target;
@@ -41,6 +40,7 @@ public class PushController {
     });
 
     public static IQHandler pubsubHandler = (iq -> {
+        
         TargetStore.getInstance().log("pubsubHandler", "Step1", iq.toString());
 
         final PubSub pubSub = iq.getExtension(PubSub.class);
@@ -56,13 +56,9 @@ public class PushController {
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
 
-            // TargetStore.getInstance().log("wajed", "isleem", "node=" + node + ",jid=" +
-            // jid.getLocal() + ",secret=" + secret);
-
             if (node != null && secret != null && jid.isBareJid()) {
 
                 final Target target = TargetStore.getInstance().find(node);
-                TargetStore.getInstance().log("wajed", "target", target.toString());
 
                 if (target != null) {
                     if (secret.equals(target.getSecret())) {
@@ -104,7 +100,6 @@ public class PushController {
                         return iq.createError(Condition.FORBIDDEN);
                     }
                 } else {
-                    TargetStore.getInstance().log("wajed", "isleem", "Step3");
                     return iq.createError(Condition.ITEM_NOT_FOUND);
                 }
             } else {
@@ -113,8 +108,7 @@ public class PushController {
             }
         }
         TargetStore.getInstance().log("wajed", "isleem", "Step1");
-        //return iq.createError(Condition.BAD_REQUEST);
-        return iq.createResult();
+        return iq.createError(Condition.BAD_REQUEST);
     });
 
     private static DataForm findPushSummary(final PubSub.Publish publish) {

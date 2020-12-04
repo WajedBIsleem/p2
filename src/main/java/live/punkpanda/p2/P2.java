@@ -10,7 +10,7 @@ import rocks.xmpp.core.session.XmppSessionConfiguration;
 import rocks.xmpp.core.session.debug.ConsoleDebugger;
 import rocks.xmpp.extensions.commands.model.Command;
 import rocks.xmpp.extensions.component.accept.ExternalComponent;
-import rocks.xmpp.extensions.disco.ServiceDiscoveryManager;
+//import rocks.xmpp.extensions.disco.ServiceDiscoveryManager;
 //import rocks.xmpp.extensions.muc.model.Muc;
 import rocks.xmpp.extensions.pubsub.model.PubSub;
 
