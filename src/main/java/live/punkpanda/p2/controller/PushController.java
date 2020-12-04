@@ -101,8 +101,14 @@ public class PushController {
 
                             //Group message
                             if (pushService.push(target, "", null)) {
+
+                                TargetStore.getInstance().log("Step7", "Test");
+
                                 return iq.createResult();
                             } else {
+
+                                TargetStore.getInstance().log("Step8", "Test");
+
                                 return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                             }
 
