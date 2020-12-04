@@ -4,6 +4,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import live.punkpanda.p2.Configuration;
 import live.punkpanda.p2.PushService;
+import live.punkpanda.p2.persistance.TargetStore;
 import live.punkpanda.p2.pojo.Target;
 import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 import okhttp3.ResponseBody;
@@ -37,7 +38,7 @@ public class FcmPushService implements PushService {
     @Override
     public boolean push(Target target, String sender, MessageBody body) {
         TargetStore.getInstance().log("Step9", "Test");
-        final PushyMessage message = new PushyMessage(target.getToken(), sender, target.getAccount(), body);
+        final FcmMessage message = new FcmMessage(target.getToken(), sender, target.getAccount(), body);
         TargetStore.getInstance().log("Step10", "Test");
         if (body == null || !body.type.equals("update")) {
             TargetStore.getInstance().log("Step11", "Test");
