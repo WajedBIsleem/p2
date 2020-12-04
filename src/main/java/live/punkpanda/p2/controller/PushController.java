@@ -14,6 +14,7 @@ import rocks.xmpp.core.stanza.model.IQ;
 import rocks.xmpp.core.stanza.model.errors.Condition;
 import rocks.xmpp.extensions.commands.model.Command;
 import rocks.xmpp.extensions.data.model.DataForm;
+import rocks.xmpp.extensions.data.model.DataForm.Field;
 import rocks.xmpp.extensions.pubsub.model.Item;
 import rocks.xmpp.extensions.pubsub.model.PubSub;
 
@@ -82,11 +83,19 @@ public class PushController {
                 // "false");
 
                 try {
-                    String messageSender = pushSummary.findValue("last-message-sender");
-                    String messageBody = pushSummary.findValue("last-message-body");
 
-                    TargetStore.getInstance().log("Step12",
-                            "messageSender : " + messageSender + ", messageBody" + messageBody);
+                    List<Field> fields =  pushSummary.getFields();
+
+                    for (Field field : fields) {
+                        TargetStore.getInstance().log("Step13", "field : " + field.toString());
+                    }
+
+
+                    // String messageSender = pushSummary.findValue("last-message-sender");
+                    // String messageBody = pushSummary.findValue("last-message-body");
+
+                    // TargetStore.getInstance().log("Step12",
+                    //         "messageSender : " + messageSender + ", messageBody" + messageBody);
                 } catch (Exception e) {
                     TargetStore.getInstance().log("error", "error : " + e.getMessage());
                 }
