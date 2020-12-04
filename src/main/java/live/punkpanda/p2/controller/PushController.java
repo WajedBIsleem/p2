@@ -48,12 +48,24 @@ public class PushController {
             final Jid jid = iq.getFrom();
             final DataForm publishOptions = pubSub.getPublishOptions();
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
+            
+            TargetStore.getInstance().log("Step1", "Test");
+
             final DataForm pushSummary = findPushSummary(publish);
 
+            TargetStore.getInstance().log("Step2", "Test");
             if (node != null && secret != null) {
 
+                TargetStore.getInstance().log("Step3", "Test");
+
                 final Target target = TargetStore.getInstance().find(node);
+
+                TargetStore.getInstance().log("Step4", "Test");
+
                 if (target != null) {
+
+                    TargetStore.getInstance().log("Step5", "Test");
+
                     if (secret.equals(target.getSecret())) {
                         final PushService pushService;
                         try {
@@ -84,6 +96,8 @@ public class PushController {
                             }
 
                         } else {
+
+                            TargetStore.getInstance().log("Step6", "Test");
 
                             //Group message
                             if (pushService.push(target, "", null)) {
