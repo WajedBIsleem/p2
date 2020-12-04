@@ -45,23 +45,40 @@ public class PushController {
         
         final PubSub pubSub = iq.getExtension(PubSub.class);
 
-        TargetStore.getInstance().log("Step2", "pubSub : " + pubSub != null ? "true": "false");
+        //TargetStore.getInstance().log("Step2", "pubSub : " + pubSub != null ? "true": "false");
 
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
             final PubSub.Publish publish = pubSub.getPublish();
-            TargetStore.getInstance().log("Step3", "publish : " + publish.getNode());
+            //TargetStore.getInstance().log("Step3", "publish : " + publish.getNode());
 
             final String node = publish != null ? publish.getNode() : null;
-            TargetStore.getInstance().log("Step4", "node : " + node);
+            //TargetStore.getInstance().log("Step4", "node : " + node);
 
             final Jid jid = iq.getFrom();
-            TargetStore.getInstance().log("Step5", "jid : " + jid.toEscapedString());
+            //TargetStore.getInstance().log("Step5", "jid : " + jid.toEscapedString());
 
             final DataForm publishOptions = pubSub.getPublishOptions();
-            TargetStore.getInstance().log("Step6", "publishOptions : " + publishOptions != null ? "true": "false");
+            //TargetStore.getInstance().log("Step6", "publishOptions : " + publishOptions != null ? "true": "false");
 
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
-            TargetStore.getInstance().log("Step7", "secret : " + secret);
+            //TargetStore.getInstance().log("Step7", "secret : " + secret);
+
+
+            final Item item = publish == null ? null : publish.getItem();
+            TargetStore.getInstance().log("Step8", "item : " + item != null ? "true": "false");
+           
+            final Object payload = item == null ? null : item.getPayload();
+            TargetStore.getInstance().log("Step9", "payload : " + payload != null ? "true": "false");
+
+
+             if (payload instanceof Notification) {
+                TargetStore.getInstance().log("Step10", "payload is instanceof Notification");
+
+                DataForm data = ((Notification) payload).getPushSummary();
+                TargetStore.getInstance().log("Step11", "data : " + data != null ? "true": "false");
+             }
+
+
         }
 
 
