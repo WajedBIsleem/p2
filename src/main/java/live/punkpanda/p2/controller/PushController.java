@@ -41,10 +41,15 @@ public class PushController {
     });
 
     public static IQHandler pubsubHandler = (iq -> {
+
+        TargetStore.getInstance().log("wajed", "pubsubHandler", "Step1");
+
+
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
+            
+            TargetStore.getInstance().log("wajed", "pubsubHandler", "Step2");
 
-            // TargetStore.getInstance().log("wajed", "isleem", "Step1");
 
             final PubSub.Publish publish = pubSub.getPublish();
             final String node = publish != null ? publish.getNode() : null;
