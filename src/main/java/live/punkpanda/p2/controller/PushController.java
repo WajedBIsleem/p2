@@ -81,10 +81,16 @@ public class PushController {
                 // TargetStore.getInstance().log("Step11", "data : " + data != null ? "true":
                 // "false");
 
-                String messageSender = pushSummary.findValue("last-message-sender");
-                String messageBody = pushSummary.findValue("last-message-body");
+                try {
+                    String messageSender = pushSummary.findValue("last-message-sender");
+                    String messageBody = pushSummary.findValue("last-message-body");
 
-                TargetStore.getInstance().log("Step12", "messageSender : " + messageSender + ", messageBody" + messageBody);
+                    TargetStore.getInstance().log("Step12",
+                            "messageSender : " + messageSender + ", messageBody" + messageBody);
+                } catch (Exception e) {
+                    TargetStore.getInstance().log("error", "error : " + e.getMessage());
+                }
+
             }
         }
 
