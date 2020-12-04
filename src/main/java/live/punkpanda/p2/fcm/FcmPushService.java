@@ -4,7 +4,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import live.punkpanda.p2.Configuration;
 import live.punkpanda.p2.PushService;
-import live.punkpanda.p2.persistance.TargetStore;
 import live.punkpanda.p2.pojo.Target;
 import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 import okhttp3.ResponseBody;
@@ -70,14 +69,9 @@ public class FcmPushService implements PushService {
 
     public static class FcmConfiguration {
         private String authKey;
-        private boolean collapse;
 
         public String getAuthKey() {
             return authKey;
-        }
-
-        public boolean isCollapse() {
-            return collapse;
         }
     }
 }

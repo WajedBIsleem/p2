@@ -7,6 +7,7 @@
     "dbUrl": "jdbc:mariadb://localhost:3306/p2?characterEncoding=utf8",
     "dbUsername": "p2",
     "dbPassword": "secret",
+    "apiBaseURL": "",
     "fcm": {
         "authKey": "copyFromApiConsole"
     },

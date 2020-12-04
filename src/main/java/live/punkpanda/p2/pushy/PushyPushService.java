@@ -3,7 +3,6 @@ package live.punkpanda.p2.pushy;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import live.punkpanda.p2.PushService;
-import live.punkpanda.p2.persistance.TargetStore;
 import live.punkpanda.p2.pojo.Target;
 import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 import okhttp3.ResponseBody;

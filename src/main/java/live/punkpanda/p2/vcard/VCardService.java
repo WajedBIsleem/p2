@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import live.punkpanda.p2.Configuration;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -13,8 +15,6 @@ public class VCardService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VCardService.class);
 
-    private static final String BASE_URL = "https://app.punkpanda.live";
-
     private final VCardHttpInterface httpInterface;
 
     public VCardService() {
@@ -22,6 +22,9 @@ public class VCardService {
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
 
         final Retrofit.Builder retrofitBuilder = new Retrofit.Builder();
+
+        final String BASE_URL = Configuration.getInstance().getApiBaseURL();
+
         retrofitBuilder.baseUrl(BASE_URL);
         retrofitBuilder.addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()));
 

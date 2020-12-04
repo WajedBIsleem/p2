@@ -17,7 +17,7 @@ public class Configuration {
     private static Configuration INSTANCE;
 
     private String host = "localhost";
-    private int port = 5348; //prosody is 5347
+    private int port = 5348;
     private String jid;
     private boolean debug = false;
     private String sharedSecret;
@@ -27,6 +27,8 @@ public class Configuration {
     private String dbUrl;
     private String dbUsername;
     private String dbPassword;
+
+    private String apiBaseURL;    
 
     public String getDbUrl() {
         return dbUrl;
@@ -38,6 +40,10 @@ public class Configuration {
 
     public String getDbPassword() {
         return dbPassword;
+    }
+
+    public String getApiBaseURL() {
+        return apiBaseURL;
     }
 
     private Configuration() {
