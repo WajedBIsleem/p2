@@ -71,7 +71,7 @@ public class P2 {
         externalComponent.addIQHandler(PubSub.class, PushController.pubsubHandler);
 
 
-        //externalComponent.getManager(ServiceDiscoveryManager.class).setEnabled(false);
+        externalComponent.getManager(ServiceDiscoveryManager.class).setEnabled(false);
         //externalComponent.disableFeature(Muc.NAMESPACE);
 
         connectAndKeepRetrying(externalComponent);
