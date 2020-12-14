@@ -43,6 +43,8 @@ public class PushController {
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
 
+            TargetStore.getInstance().log("Step1", "enter");
+            
             final PubSub.Publish publish = pubSub.getPublish();
             final String node = publish != null ? publish.getNode() : null;
             final Jid jid = iq.getFrom();
@@ -50,55 +52,76 @@ public class PushController {
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
             
+            TargetStore.getInstance().log("Step2", jid.getLocal());
+
             if (node != null && secret != null) {
+                TargetStore.getInstance().log("Step3", jid.getLocal());
                 final Target target = TargetStore.getInstance().find(node);
+                TargetStore.getInstance().log("Step4", jid.getLocal());
                 if (target != null) {
+                    TargetStore.getInstance().log("Step5", jid.getLocal());
                     if (secret.equals(target.getSecret())) {
+                        TargetStore.getInstance().log("Step6", jid.getLocal());
                         final PushService pushService;
                         try {
+                            TargetStore.getInstance().log("Step7", jid.getLocal());
                             pushService = PushServiceManager.getPushServiceInstance(target.getService());
+                            TargetStore.getInstance().log("Step8", jid.getLocal());
                         } catch (IllegalStateException e) {
+                            TargetStore.getInstance().log("Step9", jid.getLocal());
                             e.printStackTrace();
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
 
+                        TargetStore.getInstance().log("Step10", jid.getLocal());
                         if (pushSummary != null) {
-
+                            TargetStore.getInstance().log("Step11", jid.getLocal());
                             if (target.getAccount() != jid.getLocal()) {
-
+                                TargetStore.getInstance().log("Step12", jid.getLocal());
                                 String messageSender = pushSummary.findValue("last-message-sender");
                                 Jid messageSenderJid = Jid.ofEscaped(messageSender);
-
+                                TargetStore.getInstance().log("Step13", jid.getLocal());
                                 Gson gson = new Gson();
                                 MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"),
                                         MessageBody.class);
 
+                                        TargetStore.getInstance().log("Step14", jid.getLocal());
                                 if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
+                                    TargetStore.getInstance().log("Step15", jid.getLocal());
                                     return iq.createResult();
                                 } else {
+                                    TargetStore.getInstance().log("Step16", jid.getLocal());
                                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                                 }
                             } else {
+                                TargetStore.getInstance().log("Step17", jid.getLocal());
                                 return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                             }
                         } else {
+                            TargetStore.getInstance().log("Step18", jid.getLocal());
                             //Group message
                             if (pushService.push(target, "", null)) {
+                                TargetStore.getInstance().log("Step19", jid.getLocal());
                                 return iq.createResult();
                             } else {
+                                TargetStore.getInstance().log("Step20", jid.getLocal());
                                 return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                             }
                         }
                     } else {
+                        TargetStore.getInstance().log("Step21", jid.getLocal());
                         return iq.createError(Condition.FORBIDDEN);
                     }
                 } else {
+                    TargetStore.getInstance().log("Step22", jid.getLocal());
                     return iq.createError(Condition.ITEM_NOT_FOUND);
                 }
             } else {
+                TargetStore.getInstance().log("Step23", jid.getLocal());
                 return iq.createError(Condition.FORBIDDEN);
             }
         }
+        TargetStore.getInstance().log("Step24", "end");
         return iq.createError(Condition.BAD_REQUEST);
     });
 
