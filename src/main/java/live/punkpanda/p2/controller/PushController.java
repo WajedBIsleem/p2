@@ -44,14 +44,14 @@ public class PushController {
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
 
             TargetStore.getInstance().log("Step1", "enter");
-            
+
             final PubSub.Publish publish = pubSub.getPublish();
             final String node = publish != null ? publish.getNode() : null;
             final Jid jid = iq.getFrom();
             final DataForm publishOptions = pubSub.getPublishOptions();
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
-            
+
             TargetStore.getInstance().log("Step2", jid.getLocal());
 
             if (node != null && secret != null) {
@@ -85,7 +85,7 @@ public class PushController {
                                 MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"),
                                         MessageBody.class);
 
-                                        TargetStore.getInstance().log("Step14", jid.getLocal());
+                                TargetStore.getInstance().log("Step14", jid.getLocal());
                                 if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
                                     TargetStore.getInstance().log("Step15", jid.getLocal());
                                     return iq.createResult();
@@ -99,7 +99,7 @@ public class PushController {
                             }
                         } else {
                             TargetStore.getInstance().log("Step18", jid.getLocal());
-                            //Group message
+                            // Group message
                             if (pushService.push(target, "", null)) {
                                 TargetStore.getInstance().log("Step19", jid.getLocal());
                                 return iq.createResult();
@@ -140,9 +140,11 @@ public class PushController {
                 .map(p -> (DataForm) p).findFirst();
         final Jid from = iq.getFrom().asBareJid();
         if (optionalData.isPresent()) {
+            TargetStore.getInstance().log("Step1", from.getLocal());
             final DataForm data = optionalData.get();
             final String deviceId = findDeviceId(data);
             final String token = data.findValue("token");
+            TargetStore.getInstance().log("Step2", deviceId + " , " + token);
 
             if (isNullOrEmpty(token) || isNullOrEmpty(deviceId)) {
                 return iq.createError(Condition.BAD_REQUEST);
@@ -155,15 +157,24 @@ public class PushController {
                 return iq.createError(Condition.ITEM_NOT_FOUND);
             }
 
+            TargetStore.getInstance().log("Step3", deviceId + " , " + token + " , " + from.getLocal());
             Target target = TargetStore.getInstance().find(service, from.getLocal(), deviceId);
+            TargetStore.getInstance().log("Step4", (target != null) ? "t" : "f");
 
             if (target != null) {
+                TargetStore.getInstance().log("Step5", "Test");
                 if (target.setToken(token)) {
+                    TargetStore.getInstance().log("Step6", "Test");
+
                     if (!TargetStore.getInstance().update(target)) {
+                        TargetStore.getInstance().log("Step7", "Test");
+
                         return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                     }
                 }
             } else {
+                TargetStore.getInstance().log("Step8", "Test");
+
                 target = Target.create(service, from, deviceId, token);
                 TargetStore.getInstance().create(target);
             }
