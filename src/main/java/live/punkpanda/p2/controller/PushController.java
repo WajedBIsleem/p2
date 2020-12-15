@@ -136,7 +136,6 @@ public class PushController {
     }
 
     private static IQ register(final IQ iq, final Command command) {
-
         IQ res;
         String log = "";
 
@@ -165,13 +164,17 @@ public class PushController {
             log += ", deviceId=" + deviceId + ", token=" + token + ", target="
                     + ((target != null) ? target.toString() : "null");
 
+            Boolean isEnabled = (target != null);
             if (target != null) {
                 if (target.setToken(token)) {
+                    log += ", another token";
                     if (!TargetStore.getInstance().update(target)) {
                         res = iq.createError(Condition.INTERNAL_SERVER_ERROR);
                     } else {
                         log += ", token updated";
                     }
+                } else {
+                    log += ", same token";
                 }
             } else {
                 target = Target.create(service, from, deviceId, token);
@@ -181,7 +184,7 @@ public class PushController {
 
             final Command result = new Command(command.getNode(), String.valueOf(System.currentTimeMillis()),
                     Command.Status.COMPLETED, null, null,
-                    Collections.singletonList(createRegistryResponseDataForm(target.getNode(), target.getSecret())));
+                    Collections.singletonList(createRegistryResponseDataForm(isEnabled, target.getNode(), target.getSecret())));
             log += ", successfully end";
             res = iq.createResult(result);
         } else {
@@ -220,9 +223,9 @@ public class PushController {
         }
     }
 
-    private static DataForm createRegistryResponseDataForm(String node, String secret) {
+    private static DataForm createRegistryResponseDataForm(Boolean isEnabled, String node, String secret) {
         List<DataForm.Field> fields = new ArrayList<>();
-        fields.add(DataForm.Field.builder().var("jid").value(Configuration.getInstance().getJid()).build());
+        fields.add(DataForm.Field.builder().var("enabeld").value(isEnabled).build());
         fields.add(DataForm.Field.builder().var("node").value(node).build());
         fields.add(DataForm.Field.builder().var("secret").value(secret).build());
         return new DataForm(DataForm.Type.FORM, fields);
