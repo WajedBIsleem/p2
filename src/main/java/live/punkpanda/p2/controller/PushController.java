@@ -136,17 +136,15 @@ public class PushController {
     }
 
     private static IQ register(final IQ iq, final Command command) {
-        IQ res;
-        String log = "";
-
         final Optional<DataForm> optionalData = command.getPayloads().stream().filter(p -> p instanceof DataForm)
                 .map(p -> (DataForm) p).findFirst();
         final Jid from = iq.getFrom().asBareJid();
-        log += "from=" + from.toEscapedString();
         if (optionalData.isPresent()) {
+            TargetStore.getInstance().log("Step1", from.getLocal());
             final DataForm data = optionalData.get();
             final String deviceId = findDeviceId(data);
             final String token = data.findValue("token");
+            TargetStore.getInstance().log("Step2", deviceId + " , " + token);
 
             if (isNullOrEmpty(token) || isNullOrEmpty(deviceId)) {
                 return iq.createError(Condition.BAD_REQUEST);
@@ -159,41 +157,35 @@ public class PushController {
                 return iq.createError(Condition.ITEM_NOT_FOUND);
             }
 
+            TargetStore.getInstance().log("Step3", deviceId + " , " + token + " , " + from.getLocal());
             Target target = TargetStore.getInstance().find(service, from.getLocal(), deviceId);
+            TargetStore.getInstance().log("Step4", (target != null) ? "t" : "f");
 
-            log += ", deviceId=" + deviceId + ", token=" + token + ", target="
-                    + ((target != null) ? target.toString() : "null");
-
-            Boolean isEnabled = (target != null);
             if (target != null) {
+                TargetStore.getInstance().log("Step5", "Test");
                 if (target.setToken(token)) {
-                    log += ", another token";
+                    TargetStore.getInstance().log("Step6", "Test");
+
                     if (!TargetStore.getInstance().update(target)) {
-                        res = iq.createError(Condition.INTERNAL_SERVER_ERROR);
-                    } else {
-                        log += ", token updated";
+                        TargetStore.getInstance().log("Step7", "Test");
+
+                        return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                     }
-                } else {
-                    log += ", same token";
                 }
             } else {
+                TargetStore.getInstance().log("Step8", "Test");
+
                 target = Target.create(service, from, deviceId, token);
                 TargetStore.getInstance().create(target);
-                log += ", target created, target= " + target.toString();
             }
 
             final Command result = new Command(command.getNode(), String.valueOf(System.currentTimeMillis()),
                     Command.Status.COMPLETED, null, null,
-                    Collections.singletonList(createRegistryResponseDataForm(isEnabled, target.getNode(), target.getSecret())));
-            log += ", successfully end";
-            res = iq.createResult(result);
+                    Collections.singletonList(createRegistryResponseDataForm(target.getNode(), target.getSecret())));
+            return iq.createResult(result);
         } else {
-            log += ", Bad request";
-            res = iq.createError(Condition.BAD_REQUEST);
+            return iq.createError(Condition.BAD_REQUEST);
         }
-
-        TargetStore.getInstance().log("register", log);
-        return res;
     }
 
     private static String findDeviceId(DataForm data) {
@@ -223,9 +215,9 @@ public class PushController {
         }
     }
 
-    private static DataForm createRegistryResponseDataForm(Boolean isEnabled, String node, String secret) {
+    private static DataForm createRegistryResponseDataForm(String node, String secret) {
         List<DataForm.Field> fields = new ArrayList<>();
-        fields.add(DataForm.Field.builder().var("enabeld").value(isEnabled).build());
+        fields.add(DataForm.Field.builder().var("jid").value(Configuration.getInstance().getJid()).build());
         fields.add(DataForm.Field.builder().var("node").value(node).build());
         fields.add(DataForm.Field.builder().var("secret").value(secret).build());
         return new DataForm(DataForm.Type.FORM, fields);
