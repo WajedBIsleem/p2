@@ -109,15 +109,23 @@ public class PushController {
     }
 
     private static IQ register(final IQ iq, final Command command) {
+        StringBuilder log = new StringBuilder();
+
         final Optional<DataForm> optionalData = command.getPayloads().stream().filter(p -> p instanceof DataForm)
                 .map(p -> (DataForm) p).findFirst();
         final Jid from = iq.getFrom().asBareJid();
+        log.append("from=" + from.toEscapedString());
+
         if (optionalData.isPresent()) {
             final DataForm data = optionalData.get();
-            final String deviceId = findDeviceId(data);
+            final String deviceId = data.findValue("device-id");
             final String token = data.findValue("token");
 
+            log.append("deviceId=" + deviceId + ", token=" + token);
+
             if (isNullOrEmpty(token) || isNullOrEmpty(deviceId)) {
+                log.append(", end with error 1");
+                TargetStore.getInstance().log("register", log.toString());
                 return iq.createError(Condition.BAD_REQUEST);
             }
 
@@ -125,36 +133,48 @@ public class PushController {
             try {
                 service = findService(COMMAND_NODE_REGISTER_PREFIX, command.getNode());
             } catch (IllegalArgumentException e) {
+                log.append(", end with error 2");
+                TargetStore.getInstance().log("register", log.toString());
                 return iq.createError(Condition.ITEM_NOT_FOUND);
             }
 
             Target target = TargetStore.getInstance().find(service, from.getLocal(), deviceId);
 
+            log.append(", target=" + ((target != null) ? target.toString() : "null"));
+
             Boolean isEnabled = false;
+            // Boolean isEnabled = (target != null);
 
             if (target != null) {
                 if (target.setToken(token)) {
+                    log.append(", another token");
                     if (!TargetStore.getInstance().update(target)) {
+                        log.append(", end with error 3");
+                        TargetStore.getInstance().log("register", log.toString());
                         return iq.createError(Condition.INTERNAL_SERVER_ERROR);
+                    } else {
+                        log.append(", token updated");
                     }
+                } else {
+                    log.append(", same token");
                 }
             } else {
                 target = Target.create(service, from, deviceId, token);
                 TargetStore.getInstance().create(target);
+                log.append(", target created, target= " + target.toString());
             }
 
             final Command result = new Command(command.getNode(), String.valueOf(System.currentTimeMillis()),
                     Command.Status.COMPLETED, null, null, Collections.singletonList(
                             createRegistryResponseDataForm(isEnabled, target.getNode(), target.getSecret())));
+            log.append(", successfully end");
+            TargetStore.getInstance().log("register", log.toString());
             return iq.createResult(result);
         } else {
+            log.append(", end with error 4");
+            TargetStore.getInstance().log("register", log.toString());
             return iq.createError(Condition.BAD_REQUEST);
         }
-    }
-
-    private static String findDeviceId(DataForm data) {
-        final String deviceId = data.findValue("device-id");
-        return deviceId;
     }
 
     private static boolean isNullOrEmpty(String value) {
