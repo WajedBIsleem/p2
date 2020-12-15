@@ -217,7 +217,7 @@ public class PushController {
             }
 
             final DataForm data = optionalData.get();
-            final String deviceId = findDeviceId(data);
+            final String deviceId = data.findValue("device-id");
             if (isNullOrEmpty(deviceId)) {
                 return iq.createError(Condition.BAD_REQUEST);
             }
