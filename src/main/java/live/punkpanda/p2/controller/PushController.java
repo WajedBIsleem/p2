@@ -1,6 +1,5 @@
 package live.punkpanda.p2.controller;
 
-import live.punkpanda.p2.Configuration;
 import live.punkpanda.p2.PushService;
 import live.punkpanda.p2.PushServiceManager;
 import live.punkpanda.p2.persistance.TargetStore;
@@ -43,8 +42,6 @@ public class PushController {
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
 
-            TargetStore.getInstance().log("Step1", "enter");
-
             final PubSub.Publish publish = pubSub.getPublish();
             final String node = publish != null ? publish.getNode() : null;
             final Jid jid = iq.getFrom();
@@ -52,76 +49,52 @@ public class PushController {
             final String secret = publishOptions != null ? publishOptions.findValue("secret") : null;
             final DataForm pushSummary = findPushSummary(publish);
 
-            TargetStore.getInstance().log("Step2", jid.getLocal());
-
             if (node != null && secret != null) {
-                TargetStore.getInstance().log("Step3", jid.getLocal());
                 final Target target = TargetStore.getInstance().find(node);
-                TargetStore.getInstance().log("Step4", jid.getLocal());
                 if (target != null) {
-                    TargetStore.getInstance().log("Step5", jid.getLocal());
                     if (secret.equals(target.getSecret())) {
-                        TargetStore.getInstance().log("Step6", jid.getLocal());
                         final PushService pushService;
                         try {
-                            TargetStore.getInstance().log("Step7", jid.getLocal());
                             pushService = PushServiceManager.getPushServiceInstance(target.getService());
-                            TargetStore.getInstance().log("Step8", jid.getLocal());
                         } catch (IllegalStateException e) {
-                            TargetStore.getInstance().log("Step9", jid.getLocal());
                             e.printStackTrace();
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
 
-                        TargetStore.getInstance().log("Step10", jid.getLocal());
                         if (pushSummary != null) {
-                            TargetStore.getInstance().log("Step11", jid.getLocal());
                             if (target.getAccount() != jid.getLocal()) {
-                                TargetStore.getInstance().log("Step12", jid.getLocal());
                                 String messageSender = pushSummary.findValue("last-message-sender");
                                 Jid messageSenderJid = Jid.ofEscaped(messageSender);
-                                TargetStore.getInstance().log("Step13", jid.getLocal());
                                 Gson gson = new Gson();
                                 MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"),
                                         MessageBody.class);
 
-                                TargetStore.getInstance().log("Step14", jid.getLocal());
                                 if (pushService.push(target, messageSenderJid.getLocal(), messageBody)) {
-                                    TargetStore.getInstance().log("Step15", jid.getLocal());
                                     return iq.createResult();
                                 } else {
-                                    TargetStore.getInstance().log("Step16", jid.getLocal());
                                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                                 }
                             } else {
-                                TargetStore.getInstance().log("Step17", jid.getLocal());
                                 return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                             }
                         } else {
-                            TargetStore.getInstance().log("Step18", jid.getLocal());
                             // Group message
                             if (pushService.push(target, "", null)) {
-                                TargetStore.getInstance().log("Step19", jid.getLocal());
                                 return iq.createResult();
                             } else {
-                                TargetStore.getInstance().log("Step20", jid.getLocal());
                                 return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                             }
                         }
                     } else {
-                        TargetStore.getInstance().log("Step21", jid.getLocal());
                         return iq.createError(Condition.FORBIDDEN);
                     }
                 } else {
-                    TargetStore.getInstance().log("Step22", jid.getLocal());
                     return iq.createError(Condition.ITEM_NOT_FOUND);
                 }
             } else {
-                TargetStore.getInstance().log("Step23", jid.getLocal());
                 return iq.createError(Condition.FORBIDDEN);
             }
         }
-        TargetStore.getInstance().log("Step24", "end");
         return iq.createError(Condition.BAD_REQUEST);
     });
 
@@ -140,11 +113,9 @@ public class PushController {
                 .map(p -> (DataForm) p).findFirst();
         final Jid from = iq.getFrom().asBareJid();
         if (optionalData.isPresent()) {
-            TargetStore.getInstance().log("Step1", from.getLocal());
             final DataForm data = optionalData.get();
             final String deviceId = findDeviceId(data);
             final String token = data.findValue("token");
-            TargetStore.getInstance().log("Step2", deviceId + " , " + token);
 
             if (isNullOrEmpty(token) || isNullOrEmpty(deviceId)) {
                 return iq.createError(Condition.BAD_REQUEST);
@@ -157,31 +128,24 @@ public class PushController {
                 return iq.createError(Condition.ITEM_NOT_FOUND);
             }
 
-            TargetStore.getInstance().log("Step3", deviceId + " , " + token + " , " + from.getLocal());
             Target target = TargetStore.getInstance().find(service, from.getLocal(), deviceId);
-            TargetStore.getInstance().log("Step4", (target != null) ? "t" : "f");
+
+            Boolean isEnabled = false;
 
             if (target != null) {
-                TargetStore.getInstance().log("Step5", "Test");
                 if (target.setToken(token)) {
-                    TargetStore.getInstance().log("Step6", "Test");
-
                     if (!TargetStore.getInstance().update(target)) {
-                        TargetStore.getInstance().log("Step7", "Test");
-
                         return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                     }
                 }
             } else {
-                TargetStore.getInstance().log("Step8", "Test");
-
                 target = Target.create(service, from, deviceId, token);
                 TargetStore.getInstance().create(target);
             }
 
             final Command result = new Command(command.getNode(), String.valueOf(System.currentTimeMillis()),
-                    Command.Status.COMPLETED, null, null,
-                    Collections.singletonList(createRegistryResponseDataForm(target.getNode(), target.getSecret())));
+                    Command.Status.COMPLETED, null, null, Collections.singletonList(
+                            createRegistryResponseDataForm(isEnabled, target.getNode(), target.getSecret())));
             return iq.createResult(result);
         } else {
             return iq.createError(Condition.BAD_REQUEST);
@@ -190,9 +154,6 @@ public class PushController {
 
     private static String findDeviceId(DataForm data) {
         final String deviceId = data.findValue("device-id");
-        if (isNullOrEmpty(deviceId)) {
-            return data.findValue("android-id");
-        }
         return deviceId;
     }
 
@@ -215,9 +176,9 @@ public class PushController {
         }
     }
 
-    private static DataForm createRegistryResponseDataForm(String node, String secret) {
+    private static DataForm createRegistryResponseDataForm(Boolean isEnabled, String node, String secret) {
         List<DataForm.Field> fields = new ArrayList<>();
-        fields.add(DataForm.Field.builder().var("jid").value(Configuration.getInstance().getJid()).build());
+        fields.add(DataForm.Field.builder().var("enabeld").value(isEnabled).build());
         fields.add(DataForm.Field.builder().var("node").value(node).build());
         fields.add(DataForm.Field.builder().var("secret").value(secret).build());
         return new DataForm(DataForm.Type.FORM, fields);
