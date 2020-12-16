@@ -79,11 +79,11 @@ public class PushController {
                             }
                         } else {
                             // Group message
-                            if (pushService.push(target, "", null)) {
-                                return iq.createResult();
-                            } else {
-                                return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
-                            }
+                            //if (pushService.push(target, "", null)) {
+                            //    return iq.createResult();
+                            //} else {
+                            //    return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                            //}
                         }
                     } else {
                         return iq.createError(Condition.FORBIDDEN);
