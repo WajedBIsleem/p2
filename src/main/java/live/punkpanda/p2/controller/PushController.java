@@ -40,6 +40,7 @@ public class PushController {
 
     public static IQHandler pubsubHandler = (iq -> {
         final PubSub pubSub = iq.getExtension(PubSub.class);
+        System.out.println("Wajed: pubsub=" + ((pubSub != null) ? "pubSub": "null"));
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
 
             final PubSub.Publish publish = pubSub.getPublish();
@@ -99,7 +100,8 @@ public class PushController {
                 return iq.createError(Condition.FORBIDDEN);
             }
         }
-        return iq.createError(Condition.BAD_REQUEST);
+        //return iq.createError(Condition.BAD_REQUEST);
+        return iq.createResult();
     });
 
     private static DataForm findPushSummary(final PubSub.Publish publish) {
