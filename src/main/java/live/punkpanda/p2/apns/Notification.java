@@ -1,38 +1,21 @@
 package live.punkpanda.p2.apns;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Notification {
-
     public Aps aps = new Aps();
+}
 
-    private Notification() {
+class Aps {
+    public Alert alert = new Alert();
+    public int badge;
+    public String sound= "default";
+    @SerializedName("mutable-content")
+    public int mutableContent = 1;
+}
 
-    }
-
-    public static Notification createContentAvailable() {
-        final Notification notification = new Notification();
-        notification.aps.contentAvailable = 1;
-        return notification;
-    }
-
-    public static Notification createAlert() {
-        final Notification notification = new Notification();
-        notification.aps.alert = new Alert();
-        notification.aps.alert.title = "New message";
-        notification.aps.sound = "default";
-        return notification;
-    }
-
-    public static class Aps {
-        public Alert alert;
-        public Integer badge;
-        public String sound;
-        public Integer contentAvailable;
-    }
-
-    public static class Alert {
-        public String title;
-        public String subtitle;
-        public String body;
-    }
-
+class Alert {
+    public String title = "New message";
+    public String subtitle;
+    public String body;
 }
