@@ -10,12 +10,5 @@ public interface ApnsHttpInterface {
             "apns-priority: 10"
     })
     @POST("/3/device/{token}")
-    Call<Void> sendAlert(@Path("token") String token, @Header("apns-topic") String topic, @Body Notification notification);
-
-    @Headers({
-            "apns-push-type: background",
-            "apns-priority: 5"
-    })
-    @POST("/3/device/{token}")
-    Call<Void> sendBackground(@Path("token") String token, @Header("apns-topic") String topic, @Body Notification notification);
+    Call<Void> send(@Path("token") String token, @Header("apns-topic") String topic, @Body Notification notification);
 }
