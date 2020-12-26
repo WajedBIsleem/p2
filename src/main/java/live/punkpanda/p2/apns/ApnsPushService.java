@@ -78,7 +78,7 @@ public class ApnsPushService implements PushService {
         }
         try {
             final Notification notification = new Notification();
-            final Response<Void> response = this.httpInterface.sendBackground(target.getToken(), bundleId, notification).execute();
+            final Response<Void> response = this.httpInterface.sendAlert(target.getToken(), bundleId, notification).execute();
             if (response.isSuccessful()) {
                 LOGGER.info("push to APNS was successful");
                 return true;
