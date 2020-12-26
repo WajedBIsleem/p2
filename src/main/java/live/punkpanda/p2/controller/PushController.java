@@ -61,34 +61,35 @@ public class PushController {
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
 
-                        if (pushSummary != null) {
-                            if (target.getAccount() != jid.getLocal()) {
+                        if (target.getService().equals(Service.APNS)) {
 
-                                try {
-                                    String messageSender = pushSummary.findValue("last-message-sender");
-                                    Jid messageSenderJid = Jid.ofEscaped(messageSender);
-                                    Gson gson = new Gson();
-                                    MessageBody messageBody = gson.fromJson(pushSummary.findValue("last-message-body"),
-                                            MessageBody.class);
-
-                                    pushService.push(target, messageSenderJid.getLocal(), messageBody);
-                                    return iq.createResult();
-
-                                } catch (Exception e) {
-                                    return iq.createResult();
-                                }
-                            } else {
-                                return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
-                            }
-                        } else {
-                            //  if (pushService.push(target, "", null)) {
-                            //  return iq.createResult();
-                            //  } else {
-                            //  return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
-                            //  }
-
+                            pushService.push(target, "apns", new MessageBody());
                             return iq.createResult();
+
+                        } else {
+
+                            if (pushSummary != null) {
+                                if (target.getAccount() != jid.getLocal()) {
+
+                                    try {
+                                        String messageSender = pushSummary.findValue("last-message-sender");
+                                        Jid messageSenderJid = Jid.ofEscaped(messageSender);
+                                        Gson gson = new Gson();
+                                        MessageBody messageBody = gson.fromJson(
+                                                pushSummary.findValue("last-message-body"), MessageBody.class);
+
+                                        pushService.push(target, messageSenderJid.getLocal(), messageBody);
+                                        return iq.createResult();
+
+                                    } catch (Exception e) {
+                                        return iq.createResult();
+                                    }
+                                } else {
+                                    return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                                }
+                            }
                         }
+
                     } else {
                         return iq.createError(Condition.FORBIDDEN);
                     }
