@@ -61,8 +61,6 @@ public class PushController {
                                     pushSummary.findValue("last-message-body"), MessageBody.class);
 
                             isVoip = messageBody.type.equals("call");
-                            return iq.createResult();
-
                         } catch (Exception e) {
                             return iq.createResult();
                         }
