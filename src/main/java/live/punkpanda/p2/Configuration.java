@@ -24,7 +24,7 @@ public class Configuration {
     private String sharedSecret;
     private FcmPushService.FcmConfiguration fcm;
     private ApnsPushService.ApnsConfiguration apns;
-    private ApnsVoipPushService.ApnsConfiguration apnsvoip;
+    private ApnsVoipPushService.ApnsVoipConfiguration apnsvoip;
 
     private String dbUrl;
     private String dbUsername;
