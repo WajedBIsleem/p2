@@ -23,7 +23,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ApnsVoipPushService implements PushService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApnsPushService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApnsVoipPushService.class);
 
     private static final String BASE_URL = "https://api.push.apple.com";
 
@@ -32,7 +32,7 @@ public class ApnsVoipPushService implements PushService {
     private final ApnsVoipHttpInterface httpInterface;
 
 
-    public ApnsPushService() {
+    public ApnsVoipPushService() {
         final GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES);
 
