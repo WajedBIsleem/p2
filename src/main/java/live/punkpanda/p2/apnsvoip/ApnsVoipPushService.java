@@ -52,7 +52,7 @@ public class ApnsVoipPushService implements PushService {
         final OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
         okHttpBuilder.sslSocketFactory(sslContext.getSocketFactory(), trustManager);
 
-        ApnsConfiguration configuration = Configuration.getInstance().getApnsVoipConfiguration();
+        ApnsVoipConfiguration configuration = Configuration.getInstance().getApnsVoipConfiguration();
 
         final Retrofit.Builder retrofitBuilder = new Retrofit.Builder();
         if (configuration != null && configuration.isSandbox()) {
