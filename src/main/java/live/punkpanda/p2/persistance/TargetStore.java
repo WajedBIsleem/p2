@@ -17,7 +17,7 @@ import java.util.Map;
 public class TargetStore {
 
     private static final Map<Class, Converter> CONVERTERS;
-    private static final String CREATE_TARGET_TABLE = "create table if not exists target(service char(5), account char(50), device char(40) NOT NULL, domain varchar(253), token varchar(255), node char(12), secret char(24), index nodeDomain (node,domain));";
+    private static final String CREATE_TARGET_TABLE = "create table if not exists target(service char(5), account char(50), device char(40) NOT NULL, domain varchar(253), token varchar(255), token2 varchar(255), node char(12), secret char(24), index nodeDomain (node,domain));";
     private static final String CREATE_LOG_TABLE = "create table if not exists log(id INT NOT NULL AUTO_INCREMENT, title text, details text, created_at DATETIME, PRIMARY KEY (id));";
     private static TargetStore INSTANCE = null;
 
@@ -67,7 +67,7 @@ public class TargetStore {
         if (t == null) {
             try (Connection connection = database.open()) {
                 connection.createQuery(
-                        "INSERT INTO target (service,account,device,domain,token,node,secret) VALUES(:service,:account,:device,:domain,:token,:node,:secret)")
+                        "INSERT INTO target (service,account,device,domain,token,token2,node,secret) VALUES(:service,:account,:device,:domain,:token,:token2,:node,:secret)")
                         .bind(target).executeUpdate();
             }
         }
@@ -76,7 +76,7 @@ public class TargetStore {
     public Target find(String node) {
         try (Connection connection = database.open()) {
             return connection.createQuery(
-                    "select service,account,device,domain,token,node,secret from target where node=:node limit 1")
+                    "select service,account,device,domain,token,token2,node,secret from target where node=:node limit 1")
                     .addParameter("node", node).executeAndFetchFirst(Target.class);
         }
     }
@@ -84,7 +84,7 @@ public class TargetStore {
     public Target find(Service service, String account, String device) {
         try (Connection connection = database.open()) {
             return connection.createQuery(
-                    "select service,account,device,domain,token,node,secret from target where service=:service and account=:account and device=:device")
+                    "select service,account,device,domain,token,token2,node,secret from target where service=:service and account=:account and device=:device")
                     .addParameter("service", service).addParameter("account", account).addParameter("device", device)
                     .executeAndFetchFirst(Target.class);
         }
@@ -92,7 +92,7 @@ public class TargetStore {
 
     public boolean update(Target target) {
         try (Connection connection = database.open()) {
-            return connection.createQuery("update target set token=:token where account=:account and device=:device").bind(target).executeUpdate().getResult() == 1;
+            return connection.createQuery("update target set token=:token, token2=:token2 where account=:account and device=:device").bind(target).executeUpdate().getResult() == 1;
         }
     }
 

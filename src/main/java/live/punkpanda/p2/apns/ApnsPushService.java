@@ -32,14 +32,15 @@ public class ApnsPushService implements PushService {
     private final ApnsHttpInterface httpInterface;
 
 
-    public ApnsPushService() {
+    public ApnsPushService(bool isVoip) {
         final GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES);
 
         final SSLContext sslContext;
         try {
             sslContext = SSLContext.getInstance("TLSv1.2");
-            sslContext.init(new KeyManager[]{new ClientCertificateKeyManager()}, null, null);
+
+            sslContext.init(new KeyManager[]{ isVoip ? new ClientCertificateKeyManagerVoip() : new ClientCertificateKeyManager()}, null, null);
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             throw new AssertionError(e);
         }
@@ -78,7 +79,7 @@ public class ApnsPushService implements PushService {
         }
         try {
             final Notification notification = new Notification();
-            final Response<Void> response = this.httpInterface.send(target.getToken(), bundleId, notification).execute();
+            final Response<Void> response = this.httpInterface.send( sender.equals("apns") ? target.getToken() : target.getToken2(), bundleId, notification).execute();
             if (response.isSuccessful()) {
                 LOGGER.info("push to APNS was successful");
                 return true;

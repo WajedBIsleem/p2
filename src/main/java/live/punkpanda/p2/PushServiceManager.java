@@ -16,22 +16,26 @@ public class PushServiceManager {
     static {
         SERVICES = ImmutableClassToInstanceMap.<PushService>builder()
                 .put(FcmPushService.class, new FcmPushService())
-                .put(ApnsPushService.class, new ApnsPushService())
+                .put(ApnsPushService.class, new ApnsPushService(false))
                 .put(PushyPushService.class, new PushyPushService())
                 .build();
 
         SERVICE_TO_CLASS = ImmutableMap.of(Service.FCM, FcmPushService.class, Service.APNS, ApnsPushService.class, Service.PUSHY, PushyPushService.class);
     }
 
-    public static PushService getPushServiceInstance(Service service) {
-        final Class<? extends PushService> clazz = SERVICE_TO_CLASS.get(service);
-        if (clazz == null) {
-            throw new IllegalStateException(String.format("No corresponding class found for service=%s", service));
+    public static PushService getPushServiceInstance(Service service, bool isVoip) {
+       if(isVoip){
+            return new ApnsPushService(true);
+       } else{
+            final Class<? extends PushService> clazz = SERVICE_TO_CLASS.get(service);
+            if (clazz == null) {
+                throw new IllegalStateException(String.format("No corresponding class found for service=%s", service));
+            }
+            final PushService pushService = SERVICES.getInstance(clazz);
+            if (pushService == null) {
+                throw new IllegalStateException(String.format("No instance found for %s", clazz.getName()));
+            }
+            return SERVICES.getInstance(clazz);
         }
-        final PushService pushService = SERVICES.getInstance(clazz);
-        if (pushService == null) {
-            throw new IllegalStateException(String.format("No instance found for %s", clazz.getName()));
-        }
-        return SERVICES.getInstance(clazz);
     }
 }

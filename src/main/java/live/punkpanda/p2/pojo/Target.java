@@ -11,24 +11,26 @@ public class Target {
     private String device;
     private String domain;
     private String token;
+    private String token2;
     private String node;
     private String secret;
 
-    private Target(Service service, String account, String device, String domain, String token, String node,
+    private Target(Service service, String account, String device, String domain, String token, String token2, String node,
             String secret) {
         this.service = service;
         this.account = account;
         this.device = device;
         this.domain = domain;
         this.token = token;
+        this.token2 = token2;
         this.node = node;
         this.secret = secret;
     }
 
-    public static Target create(Service service, Jid account, String device, String token) {
+    public static Target create(Service service, Jid account, String device, String token, String token2) {
         String node = Utils.random(3, P2.SECURE_RANDOM);
         String secret = Utils.random(6, P2.SECURE_RANDOM);
-        return new Target(service, account.getLocal(), device, account.getDomain(), token, node, secret);
+        return new Target(service, account.getLocal(), device, account.getDomain(), token, token2, node, secret);
     }
 
     public Service getService() {
@@ -43,11 +45,12 @@ public class Target {
         return secret;
     }
 
-    public boolean setToken(String token) {
-        if (this.token != null && this.token.equals(token)) {
+    public boolean setToken(String token, String token2) {
+        if (this.token != null && this.token.equals(token) && this.token2 != null && this.token2.equals(token2)) {
             return false;
         }
         this.token = token;
+        this.token2 = token2;
         return true;
     }
 
@@ -63,12 +66,16 @@ public class Target {
         return token;
     }
 
+    public String getToken2() {
+        return token;
+    }
+
     public String getDomain() {
         return domain;
     }
 
     @Override
     public String toString() {
-        return service + " - " + account  + " - "+ device  + " - " + domain  + " - " + token + " - " + node + " - " + secret;
+        return service + " - " + account  + " - "+ device  + " - " + domain  + " - " + token + " - " +  token2 + " - " + node + " - " + secret;
     }
 }

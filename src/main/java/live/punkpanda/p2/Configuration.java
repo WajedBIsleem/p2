@@ -23,6 +23,7 @@ public class Configuration {
     private String sharedSecret;
     private FcmPushService.FcmConfiguration fcm;
     private ApnsPushService.ApnsConfiguration apns;
+    private ApnsPushService.ApnsConfiguration apnsvoip;
 
     private String dbUrl;
     private String dbUsername;
@@ -90,6 +91,10 @@ public class Configuration {
 
     public ApnsPushService.ApnsConfiguration getApnsConfiguration() {
         return this.apns;
+    }
+
+    public ApnsPushService.ApnsConfiguration getApnsVoipConfiguration() {
+        return this.apnsvoip;
     }
 
     public String getName() {

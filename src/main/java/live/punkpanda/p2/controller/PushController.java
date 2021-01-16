@@ -53,17 +53,30 @@ public class PushController {
                 final Target target = TargetStore.getInstance().find(node);
                 if (target != null) {
                     if (secret.equals(target.getSecret())) {
+
+                        bool isVoip = false;
+                        try {
+                            MessageBody messageBody = gson.fromJson(
+                                    pushSummary.findValue("last-message-body"), MessageBody.class);
+
+                            isVoip = messageBody.type.equals("call");
+                            return iq.createResult();
+
+                        } catch (Exception e) {
+                            return iq.createResult();
+                        }
+
+
                         final PushService pushService;
                         try {
-                            pushService = PushServiceManager.getPushServiceInstance(target.getService());
+                            pushService = PushServiceManager.getPushServiceInstance(target.getService(), isVoip);
                         } catch (IllegalStateException e) {
                             e.printStackTrace();
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
 
                         if (target.getService().equals(Service.APNS)) {
-
-                            pushService.push(target, "apns", new MessageBody());
+                            pushService.push(target, isVoip ? "voip" : "apns", new MessageBody());
                             return iq.createResult();
 
                         } else {
@@ -122,6 +135,7 @@ public class PushController {
             final DataForm data = optionalData.get();
             final String deviceId = data.findValue("device-id");
             final String token = data.findValue("token");
+            final String token2 = data.findValue("token2");
 
             if (isNullOrEmpty(token) || isNullOrEmpty(deviceId)) {
                 return iq.createError(Condition.BAD_REQUEST);
@@ -139,13 +153,13 @@ public class PushController {
             Boolean isEnabled = (target != null);
 
             if (target != null) {
-                if (target.setToken(token)) {
+                if (target.setToken(token, token2)) {
                     if (!TargetStore.getInstance().update(target)) {
                         return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                     }
                 }
             } else {
-                target = Target.create(service, from, deviceId, token);
+                target = Target.create(service, from, deviceId, token, token2);
                 TargetStore.getInstance().create(target);
             }
 
