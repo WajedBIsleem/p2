@@ -3,6 +3,7 @@ package live.punkpanda.p2;
 import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.collect.ImmutableMap;
 import live.punkpanda.p2.apns.ApnsPushService;
+import live.punkpanda.p2.apnsvoip.ApnsVoipPushService;
 import live.punkpanda.p2.fcm.FcmPushService;
 import live.punkpanda.p2.pushy.PushyPushService;
 import live.punkpanda.p2.pojo.Service;
