@@ -24,13 +24,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ClientCertificateKeyManager implements X509KeyManager {
+public class ClientCertificateKeyManagerVoip implements X509KeyManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientCertificateKeyManager.class);
 
     private final CertificateFactory certificateFactory;
 
-    ClientCertificateKeyManager() {
+    ClientCertificateKeyManagerVoip() {
         try {
             certificateFactory = CertificateFactory.getInstance("X.509");
         } catch (CertificateException e) {
