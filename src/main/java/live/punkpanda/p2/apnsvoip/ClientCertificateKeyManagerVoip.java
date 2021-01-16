@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class ClientCertificateKeyManagerVoip implements X509KeyManager {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientCertificateKeyManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientCertificateKeyManagerVoip.class);
 
     private final CertificateFactory certificateFactory;
 
@@ -60,7 +60,7 @@ public class ClientCertificateKeyManagerVoip implements X509KeyManager {
 
     @Override
     public X509Certificate[] getCertificateChain(String alias) {
-        final ApnsVoipPushService.ApnsConfiguration config = Configuration.getInstance().getApnsVoipConfiguration();
+        final ApnsVoipPushService.ApnsVoipConfiguration config = Configuration.getInstance().getApnsVoipConfiguration();
         final String certificateFile = config == null ? null : config.getCertificate();
         if (certificateFile == null) {
             LOGGER.error("No client certificate configured");
