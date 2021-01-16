@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import live.punkpanda.p2.apns.ApnsPushService;
+import live.punkpanda.p2.apnsvoip.ApnsVoipPushService;
 import live.punkpanda.p2.fcm.FcmPushService;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public class Configuration {
     private String sharedSecret;
     private FcmPushService.FcmConfiguration fcm;
     private ApnsPushService.ApnsConfiguration apns;
-    private ApnsPushService.ApnsConfiguration apnsvoip;
+    private ApnsVoipPushService.ApnsConfiguration apnsvoip;
 
     private String dbUrl;
     private String dbUsername;
@@ -93,7 +94,7 @@ public class Configuration {
         return this.apns;
     }
 
-    public ApnsPushService.ApnsConfiguration getApnsVoipConfiguration() {
+    public ApnsVoipPushService.ApnsVoipConfiguration getApnsVoipConfiguration() {
         return this.apnsvoip;
     }
 

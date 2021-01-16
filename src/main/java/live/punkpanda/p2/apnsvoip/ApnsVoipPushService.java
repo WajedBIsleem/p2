@@ -93,7 +93,7 @@ public class ApnsVoipPushService implements PushService {
         return false;
     }
 
-    public static class ApnsConfiguration {
+    public static class ApnsVoipConfiguration {
         private String privateKey;
         private String certificate;
         private String bundleId;

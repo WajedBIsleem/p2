@@ -60,7 +60,7 @@ public class ClientCertificateKeyManagerVoip implements X509KeyManager {
 
     @Override
     public X509Certificate[] getCertificateChain(String alias) {
-        final ApnsPushService.ApnsConfiguration config = Configuration.getInstance().getApnsVoipConfiguration();
+        final ApnsVoipPushService.ApnsConfiguration config = Configuration.getInstance().getApnsVoipConfiguration();
         final String certificateFile = config == null ? null : config.getCertificate();
         if (certificateFile == null) {
             LOGGER.error("No client certificate configured");
@@ -86,7 +86,7 @@ public class ClientCertificateKeyManagerVoip implements X509KeyManager {
     @Override
     public PrivateKey getPrivateKey(String s) {
         //openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in /home/daniel/Projects/letsencrypt.sh/certs/gultsch.de/privkey.pem -out privatekey.pem
-        final ApnsPushService.ApnsConfiguration config = Configuration.getInstance().getApnsVoipConfiguration();
+        final ApnsVoipPushService.ApnsVoipConfiguration config = Configuration.getInstance().getApnsVoipConfiguration();
         final String privateKeyFile = config == null ? null : config.getPrivateKey();
         if (privateKeyFile == null) {
             LOGGER.error("Unable to load private key for client certificate authentication. No key configured");
