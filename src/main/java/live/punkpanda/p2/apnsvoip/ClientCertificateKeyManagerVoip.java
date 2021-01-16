@@ -1,4 +1,4 @@
-package live.punkpanda.p2.apns;
+package live.punkpanda.p2.apnsvoip;
 
 import live.punkpanda.p2.Configuration;
 import org.slf4j.Logger;

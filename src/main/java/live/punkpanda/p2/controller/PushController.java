@@ -68,14 +68,19 @@ public class PushController {
 
                         final PushService pushService;
                         try {
-                            pushService = PushServiceManager.getPushServiceInstance(target.getService(), isVoip);
+                            pushService = PushServiceManager.getPushServiceInstance(target.getService());
                         } catch (IllegalStateException e) {
                             e.printStackTrace();
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
 
                         if (target.getService().equals(Service.APNS)) {
-                            pushService.push(target, isVoip ? "voip" : "apns", new MessageBody());
+
+                            if(isVoip){
+                                pushService= new ApnsVoipPushService();
+                            }
+
+                            pushService.push(target, "apns", new MessageBody());
                             return iq.createResult();
 
                         } else {

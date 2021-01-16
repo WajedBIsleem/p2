@@ -1,4 +1,4 @@
-package live.punkpanda.p2.apns;
+package live.punkpanda.p2.apnsvoip;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
@@ -21,7 +21,7 @@ import javax.net.ssl.X509TrustManager;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
-public class ApnsPushService implements PushService {
+public class ApnsVoipPushService implements PushService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApnsPushService.class);
 
@@ -29,7 +29,7 @@ public class ApnsPushService implements PushService {
 
     private static final String SANDBOX_BASE_URL = "https://api.sandbox.push.apple.com";
 
-    private final ApnsHttpInterface httpInterface;
+    private final ApnsVoipHttpInterface httpInterface;
 
 
     public ApnsPushService() {
@@ -40,7 +40,7 @@ public class ApnsPushService implements PushService {
         try {
             sslContext = SSLContext.getInstance("TLSv1.2");
 
-            sslContext.init(new KeyManager[]{ new ClientCertificateKeyManager()}, null, null);
+            sslContext.init(new KeyManager[]{ new ClientCertificateKeyManagerVoip() }, null, null);
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             throw new AssertionError(e);
         }
@@ -65,7 +65,7 @@ public class ApnsPushService implements PushService {
 
         final Retrofit retrofit = retrofitBuilder.build();
 
-        this.httpInterface = retrofit.create(ApnsHttpInterface.class);
+        this.httpInterface = retrofit.create(ApnsVoipHttpInterface.class);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class ApnsPushService implements PushService {
         }
         try {
             final Notification notification = new Notification();
-            final Response<Void> response = this.httpInterface.send(target.getToken(), bundleId, notification).execute();
+            final Response<Void> response = this.httpInterface.send(target.getToken2(), bundleId, notification).execute();
             if (response.isSuccessful()) {
                 LOGGER.info("push to APNS was successful");
                 return true;
