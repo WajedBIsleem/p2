@@ -1,6 +1,5 @@
 package live.punkpanda.p2.controller;
 
-import live.punkpanda.p2.apnsvoip;
 import live.punkpanda.p2.PushService;
 import live.punkpanda.p2.PushServiceManager;
 import live.punkpanda.p2.persistance.TargetStore;
@@ -8,6 +7,7 @@ import live.punkpanda.p2.pojo.Service;
 import live.punkpanda.p2.pojo.Target;
 import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 import live.punkpanda.p2.xmpp.extensions.push.Notification;
+import live.punkpanda.p2.apnsvoip.ApnsVoipPushService;
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.stanza.IQHandler;
 import rocks.xmpp.core.stanza.model.IQ;
