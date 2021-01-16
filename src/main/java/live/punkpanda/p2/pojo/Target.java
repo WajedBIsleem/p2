@@ -67,7 +67,7 @@ public class Target {
     }
 
     public String getToken2() {
-        return token;
+        return token2;
     }
 
     public String getDomain() {

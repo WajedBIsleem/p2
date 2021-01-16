@@ -62,7 +62,9 @@ public class TargetStore {
     }
 
     public void create(Target target) {
-
+        System.out.print("------------------------------------------------");
+        System.out.print(target.getToken());
+        System.out.print(target.getToken2());
         Target t = find(target.getService(), target.getAccount(), target.getDevice());
         if (t == null) {
             try (Connection connection = database.open()) {
