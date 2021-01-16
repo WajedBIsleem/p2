@@ -32,7 +32,7 @@ public class ApnsPushService implements PushService {
     private final ApnsHttpInterface httpInterface;
 
 
-    public ApnsPushService(bool isVoip) {
+    public ApnsPushService(boolean isVoip) {
         final GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES);
 

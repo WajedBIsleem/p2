@@ -23,7 +23,7 @@ public class PushServiceManager {
         SERVICE_TO_CLASS = ImmutableMap.of(Service.FCM, FcmPushService.class, Service.APNS, ApnsPushService.class, Service.PUSHY, PushyPushService.class);
     }
 
-    public static PushService getPushServiceInstance(Service service, bool isVoip) {
+    public static PushService getPushServiceInstance(Service service, boolean isVoip) {
        if(isVoip){
             return new ApnsPushService(true);
        } else{
