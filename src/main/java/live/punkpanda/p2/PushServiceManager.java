@@ -16,7 +16,7 @@ public class PushServiceManager {
     static {
         SERVICES = ImmutableClassToInstanceMap.<PushService>builder()
                 .put(FcmPushService.class, new FcmPushService())
-                .put(ApnsPushService.class, new ApnsPushService(false))
+                .put(ApnsPushService.class, new ApnsPushService())
                 .put(PushyPushService.class, new PushyPushService())
                 .build();
 
