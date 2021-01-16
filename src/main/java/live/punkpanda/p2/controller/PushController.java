@@ -56,6 +56,7 @@ public class PushController {
 
                         boolean isVoip = false;
                         try {
+                            Gson gson = new Gson();
                             MessageBody messageBody = gson.fromJson(
                                     pushSummary.findValue("last-message-body"), MessageBody.class);
 
