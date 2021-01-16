@@ -52,7 +52,7 @@ public class ApnsVoipPushService implements PushService {
         final OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
         okHttpBuilder.sslSocketFactory(sslContext.getSocketFactory(), trustManager);
 
-        ApnsConfiguration configuration = Configuration.getInstance().getApnsConfiguration();
+        ApnsConfiguration configuration = Configuration.getInstance().getApnsVoipConfiguration();
 
         final Retrofit.Builder retrofitBuilder = new Retrofit.Builder();
         if (configuration != null && configuration.isSandbox()) {
@@ -71,15 +71,12 @@ public class ApnsVoipPushService implements PushService {
     @Override
     public boolean push(final Target target, final String sender, final MessageBody body) {
         LOGGER.info("attempt push to APNS ("+target.getToken()+")");
-        final ApnsConfiguration configuration = Configuration.getInstance().getApnsConfiguration();
-        final String bundleId = configuration == null ? null : configuration.getBundleId();
-        if (bundleId == null) {
-            LOGGER.error("bundle id not configured");
-            return false;
-        }
+        final ApnsConfiguration configuration = Configuration.getInstance().getApnsVoipConfiguration();
+        final String bundleId = configuration.getBundleId();
+
         try {
-            final Notification notification = new Notification();
-            final Response<Void> response = this.httpInterface.send(target.getToken2(), bundleId, notification).execute();
+            final NotificationVoip notificationvoip = new NotificationVoip();
+            final Response<Void> response = this.httpInterface.send(target.getToken2(), bundleId, notificationvoip).execute();
             if (response.isSuccessful()) {
                 LOGGER.info("push to APNS was successful");
                 return true;
