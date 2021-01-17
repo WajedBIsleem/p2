@@ -8,14 +8,14 @@ public class NotificationVoip {
 
 class Aps {
     public Alert alert = new Alert();
-    public int badge;
+    public int badge = 0;
     public String sound= "default";
-    @SerializedName("mutable-content")
-    public int mutableContent = 1;
+    @SerializedName("content-available")
+    public int contentavailable = 1;
 }
 
 class Alert {
-    public String title = "New message";
+    public String title = "Incomming call";
     public String subtitle;
     public String body;
 }
