@@ -70,7 +70,7 @@ public class ApnsVoipPushService implements PushService {
 
     @Override
     public boolean push(final Target target, final String sender, final MessageBody body) {
-        LOGGER.info("attempt push to APNS ("+target.getToken()+")");
+        LOGGER.info("attempt push to APNS (" + target.getToken2() + ")");
         final ApnsVoipConfiguration configuration = Configuration.getInstance().getApnsVoipConfiguration();
         final String bundleId = configuration.getBundleId();
 
@@ -83,7 +83,7 @@ public class ApnsVoipPushService implements PushService {
             } else {
                 final ResponseBody errorBody = response.errorBody();
                 final String errorBodyString = errorBody == null ? null : errorBody.string();
-                LOGGER.warn("push to APNS failed with response code=" +response.code()+", body="+errorBodyString);
+                LOGGER.warn("push to APNS failed with response code=" + response.code() + ", body=" + errorBodyString);
             }
         } catch (Exception e) {
             LOGGER.warn("push to APNS failed", e);
