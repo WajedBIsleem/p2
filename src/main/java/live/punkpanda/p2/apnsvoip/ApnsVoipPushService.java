@@ -71,7 +71,7 @@ public class ApnsVoipPushService implements PushService {
     @Override
     public boolean push(final Target target, final String sender, final MessageBody body) {
         LOGGER.info("wajed  (" + target.getToken() + ")");
-        LOGGER.warning(target.toString());
+        LOGGER.info(target.toString());
         LOGGER.info("attempt push to APNS (" + target.getToken2() + ")");
         final ApnsVoipConfiguration configuration = Configuration.getInstance().getApnsVoipConfiguration();
         final String bundleId = configuration.getBundleId();
