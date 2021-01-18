@@ -76,9 +76,11 @@ public class PushController {
                         }
 
                         if (target.getService().equals(Service.APNS)) {
-                            LOGGER.info("---------------------------------------------");
-                            LOGGER.info(target.getToken2);
-                            LOGGER.info("---------------------------------------------");
+                            System.out.println("---------------------------------------------");
+                            System.out.println(target.getToken2());
+                            System.out.println("---------------------------------------------");
+                            System.out.println(target.toString());
+                            System.out.println("---------------------------------------------");
                             pushService.push(target, "apns", new MessageBody());
                             return iq.createResult();
 
