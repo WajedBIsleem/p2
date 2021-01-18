@@ -23,7 +23,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ApnsVoipPushService implements PushService {
 
-    private static final java.util.logging.Logger LOGGER = LoggerFactory.getLogger(ApnsVoipPushService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApnsVoipPushService.class);
 
     private static final String BASE_URL = "https://api.push.apple.com";
 
