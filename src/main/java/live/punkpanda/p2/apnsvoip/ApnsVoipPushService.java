@@ -23,7 +23,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ApnsVoipPushService implements PushService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApnsVoipPushService.class);
+    private static final java.util.logging.Logger LOGGER = LoggerFactory.getLogger(ApnsVoipPushService.class);
 
     private static final String BASE_URL = "https://api.push.apple.com";
 
@@ -70,6 +70,8 @@ public class ApnsVoipPushService implements PushService {
 
     @Override
     public boolean push(final Target target, final String sender, final MessageBody body) {
+        LOGGER.info("wajed  (" + target.getToken() + ")");
+        LOGGER.warning(target.toString());
         LOGGER.info("attempt push to APNS (" + target.getToken2() + ")");
         final ApnsVoipConfiguration configuration = Configuration.getInstance().getApnsVoipConfiguration();
         final String bundleId = configuration.getBundleId();
