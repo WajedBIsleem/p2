@@ -76,7 +76,7 @@ public class ApnsVoipPushService implements PushService {
 
         try {
             final NotificationVoip notificationvoip = new NotificationVoip();
-            final Response<Void> response = this.httpInterface.send(target.getToken2(), bundleId, notificationvoip).execute();
+            final Response<Void> response = this.httpInterface.send(target.getToken2(), notificationvoip).execute();
             if (response.isSuccessful()) {
                 LOGGER.info("push to APNS was successful");
                 return true;
