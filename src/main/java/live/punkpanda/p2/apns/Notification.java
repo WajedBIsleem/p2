@@ -27,13 +27,18 @@ class Aps {
         OfflineService offlineService = new OfflineService();
         badge = offlineService.offline(recevier);
 
-        alert = new Alert();
+        alert = new Alert(senderName);
     }
 }
 
 class Alert {
-    public String title = "wajed";
-    public String body  = "hi";
+    public String title;
+    public String body;
+
+    public Alert(String senderName){
+        this.title = senderName;
+        this.body  = "hi";
+    }
 
     // public Alert(String senderName, MessageBody messagebody) {
     //     title = "wajed";
