@@ -13,7 +13,7 @@ public class Notification {
 }
 
 class Aps {
-    public Alert alert = new Alert();
+    public Alert alert;
     public int badge;
     public String sound= "default";
 
@@ -27,7 +27,7 @@ class Aps {
         OfflineService offlineService = new OfflineService();
         badge = offlineService.offline(recevier);
 
-        alert = new Alert(senderName, body);
+        alert = new Alert();
     }
 }
 
