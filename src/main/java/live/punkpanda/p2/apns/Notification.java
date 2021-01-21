@@ -27,7 +27,7 @@ class Aps {
         OfflineService offlineService = new OfflineService();
         badge = offlineService.offline(recevier);
 
-        alert = new Alert(senderName);
+        alert = new Alert(senderName, body);
     }
 }
 
@@ -35,9 +35,9 @@ class Alert {
     public String title;
     public String body;
 
-    public Alert(String senderName){
+    public Alert(String senderName, MessageBody messagebody){
         this.title = senderName;
-        this.body  = "hi";
+        this.body  = messagebody.content;
     }
 
     // public Alert(String senderName, MessageBody messagebody) {
