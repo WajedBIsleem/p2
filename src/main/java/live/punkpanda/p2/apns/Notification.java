@@ -27,6 +27,7 @@ class Aps {
         badge = offlineService.offline(recevier);
 
         alert = new Alert(senderName, body);
+        
     }
 }
 
@@ -35,21 +36,23 @@ class Alert {
     public String body;
 
     public Alert(String senderName, MessageBody messagebody) {
-        title = senderName.equals("") ? "Group message" : senderName;
-        if (messagebody != null) {
-            if (messagebody.type.equals("text")) {
-                body = messagebody.content;
-            } else if (messagebody.type.equals("image")) {
-                body = "Receive image";
-            } else if (messagebody.type.equals("voice")) {
-                body = "Receive voice";
-            } else if (messagebody.type.equals("video")) {
-                body = "Receive video";
-            } else if (messagebody.type.equals("file")) {
-                body = "Receive file";
-            }
-        } else {
-            body = "";
-        }
+        title = "wajed";
+        body = "hi";
+        // title = senderName.equals("") ? "Group message" : senderName;
+        // if (messagebody != null) {
+        //     if (messagebody.type.equals("text")) {
+        //         body = messagebody.content;
+        //     } else if (messagebody.type.equals("image")) {
+        //         body = "Receive image";
+        //     } else if (messagebody.type.equals("voice")) {
+        //         body = "Receive voice";
+        //     } else if (messagebody.type.equals("video")) {
+        //         body = "Receive video";
+        //     } else if (messagebody.type.equals("file")) {
+        //         body = "Receive file";
+        //     }
+        // } else {
+        //     body = "";
+        // }
     }
 }
