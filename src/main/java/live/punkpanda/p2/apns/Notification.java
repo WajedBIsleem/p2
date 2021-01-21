@@ -31,7 +31,7 @@ class Aps {
 }
 
 class Alert {
-    public String title = "New message";
+    public String title;
     public String body;
 
     public Alert(String senderName, MessageBody messagebody) {
