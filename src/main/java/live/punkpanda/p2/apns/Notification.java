@@ -6,8 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 
 public class Notification { 
+    Aps aps;
     public Notification(String sender, String recevier, MessageBody body){
-        Aps aps = new Aps(sender, recevier, body);
+        aps = new Aps(sender, recevier, body);
     }
 }
 
@@ -15,6 +16,7 @@ class Aps {
     public Alert alert;
     public int badge;
     public String sound= "default";
+
 
     public Aps(String sender, String recevier, MessageBody body) {
         String senderName = "";
