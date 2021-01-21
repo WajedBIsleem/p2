@@ -75,15 +75,9 @@ public class PushController {
                             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
                         }
 
-                        if (target.getService().equals(Service.APNS)) {
-                            System.out.println("---------------------------------------------");
-                            System.out.println(target.getToken2());
-                            System.out.println("---------------------------------------------");
-                            System.out.println(target.toString());
-                            System.out.println("---------------------------------------------");
+                        if (isVoip) {
                             pushService.push(target, "apns", new MessageBody());
                             return iq.createResult();
-
                         } else {
 
                             if (pushSummary != null) {
@@ -105,6 +99,12 @@ public class PushController {
                                 } else {
                                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                                 }
+                            }else {
+                                //  if (pushService.push(target, "", null)) {
+                                //     return iq.createResult();
+                                //  } else {
+                                //     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                                //  }
                             }
                         }
 
