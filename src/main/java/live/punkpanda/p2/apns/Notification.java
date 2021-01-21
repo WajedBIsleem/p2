@@ -19,14 +19,14 @@ class Aps {
 
 
      public Aps(String sender, String recevier, MessageBody body) {
-    //     String senderName = "";
-    //     if (!sender.equals("")) {
-    //         VCardService vCardService = new VCardService();
-    //         senderName = vCardService.vcard(sender);
-    //     }
+         String senderName = "";
+         if (!sender.equals("")) {
+             VCardService vCardService = new VCardService();
+             senderName = vCardService.vcard(sender);
+         }
 
-    //     OfflineService offlineService = new OfflineService();
-    //     badge = offlineService.offline(recevier);
+         OfflineService offlineService = new OfflineService();
+         badge = offlineService.offline(recevier);
 
     //     alert = new Alert(senderName, body);
         
