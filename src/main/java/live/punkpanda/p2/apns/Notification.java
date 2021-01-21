@@ -35,29 +35,22 @@ class Alert {
     public String title;
     public String body;
 
-    public Alert(String senderName, MessageBody messagebody){
-        this.title = senderName;
-        this.body  = messagebody.content;
+    public Alert(String senderName, MessageBody messagebody) {
+        title = senderName.equals("") ? "Group message" : senderName;
+        if (messagebody != null) {
+            if (messagebody.type.equals("text")) {
+                body = messagebody.content;
+            } else if (messagebody.type.equals("image")) {
+                body = "Receive image";
+            } else if (messagebody.type.equals("voice")) {
+                body = "Receive voice";
+            } else if (messagebody.type.equals("video")) {
+                body = "Receive video";
+            } else if (messagebody.type.equals("file")) {
+                body = "Receive file";
+            }
+        } else {
+            body = "";
+        }
     }
-
-    // public Alert(String senderName, MessageBody messagebody) {
-    //     title = "wajed";
-    //     body = "hi";
-    //     // title = senderName.equals("") ? "Group message" : senderName;
-    //     // if (messagebody != null) {
-    //     //     if (messagebody.type.equals("text")) {
-    //     //         body = messagebody.content;
-    //     //     } else if (messagebody.type.equals("image")) {
-    //     //         body = "Receive image";
-    //     //     } else if (messagebody.type.equals("voice")) {
-    //     //         body = "Receive voice";
-    //     //     } else if (messagebody.type.equals("video")) {
-    //     //         body = "Receive video";
-    //     //     } else if (messagebody.type.equals("file")) {
-    //     //         body = "Receive file";
-    //     //     }
-    //     // } else {
-    //     //     body = "";
-    //     // }
-    // }
 }
