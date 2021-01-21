@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 
 public class Notification { 
-    public Aps aps = new Aps();
+    public Aps aps;
     public Notification(String sender, String recevier, MessageBody body) {
-        //aps = new Aps(sender, recevier, body);
+        aps = new Aps(sender, recevier, body);
     }
 }
 
@@ -18,7 +18,7 @@ class Aps {
     public String sound= "default";
 
 
-    // public Aps(String sender, String recevier, MessageBody body) {
+     public Aps(String sender, String recevier, MessageBody body) {
     //     String senderName = "";
     //     if (!sender.equals("")) {
     //         VCardService vCardService = new VCardService();
@@ -30,7 +30,7 @@ class Aps {
 
     //     alert = new Alert(senderName, body);
         
-    // }
+    }
 }
 
 class Alert {
