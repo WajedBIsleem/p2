@@ -91,6 +91,7 @@ public class ApnsVoipPushService implements PushService {
 
     try {
       final NotificationVoip notificationvoip = new NotificationVoip(body);
+      LOGGER.info("wajed :" + notificationvoip.toString());
       final Response<Void> response =
         this.httpInterface.send(target.getToken2(), notificationvoip).execute();
       if (response.isSuccessful()) {

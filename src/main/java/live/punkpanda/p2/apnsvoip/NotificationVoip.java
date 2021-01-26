@@ -13,6 +13,21 @@ public class NotificationVoip {
     aps = new Aps();
     data = new Data(body);
   }
+
+  @Override
+  public String toString() {
+    return (
+      data.sid +
+      " - " +
+      data.sender +
+      " - " +
+      data.media.size() +
+      " - " +
+      (data.media.size() > 0 ? data.media.get(0) : "") +
+      " - " +
+      (data.media.size() > 1 ? data.media.get(1) : "")
+    );
+  }
 }
 
 class Aps {
