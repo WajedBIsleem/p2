@@ -2,6 +2,7 @@ package live.punkpanda.p2.apnsvoip;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 
 public class NotificationVoip {
 
