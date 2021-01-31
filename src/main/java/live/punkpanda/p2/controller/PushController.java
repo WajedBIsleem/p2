@@ -18,8 +18,12 @@ import rocks.xmpp.extensions.commands.model.Command;
 import rocks.xmpp.extensions.data.model.DataForm;
 import rocks.xmpp.extensions.pubsub.model.Item;
 import rocks.xmpp.extensions.pubsub.model.PubSub;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PushController {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApnsPushService.class);
 
   private static final String COMMAND_NODE_REGISTER_PREFIX = "register-push-";
   private static final String COMMAND_NODE_UNREGISTER_PREFIX =
