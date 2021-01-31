@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class PushController {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ApnsPushService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PushController.class);
 
   private static final String COMMAND_NODE_REGISTER_PREFIX = "register-push-";
   private static final String COMMAND_NODE_UNREGISTER_PREFIX =
@@ -56,7 +56,7 @@ public class PushController {
 
         return iq.createResult();
 
-        
+
       //   final PubSub pubSub = iq.getExtension(PubSub.class);
       //   if (pubSub != null && iq.getType() == IQ.Type.SET) {
       //     final PubSub.Publish publish = pubSub.getPublish();
