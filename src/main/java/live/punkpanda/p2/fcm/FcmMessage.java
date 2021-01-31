@@ -1,66 +1,67 @@
 package live.punkpanda.p2.fcm;
 
-import live.punkpanda.p2.vcard.VCardService;
-import live.punkpanda.p2.offline.OfflineService;
-import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 import com.google.gson.annotations.SerializedName;
+import live.punkpanda.p2.offline.OfflineService;
+import live.punkpanda.p2.vcard.VCardService;
+import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 
 public class FcmMessage {
-    public final String to;
-    public final Data data;
-    public final Notification notification;
 
-    public FcmMessage(String to, String sender, String recevier, MessageBody body) {
-        this.to = to;
+  public final String to;
+  public final Data data;
 
-        String senderName = "";
-        if (!sender.equals("")) {
-            VCardService vCardService = new VCardService();
-            senderName = vCardService.vcard(sender);
-        }
+  public FcmMessage(
+    String to,
+    String sender,
+    String recevier,
+    MessageBody body
+  ) {
+    this.to = to;
 
-        OfflineService offlineService = new OfflineService();
-        int offlineCount = offlineService.offline(recevier);
-
-        this.data = new Data(sender);
-        this.notification = new Notification(senderName, body, offlineCount);
+    String senderName = "";
+    if (!sender.equals("")) {
+      VCardService vCardService = new VCardService();
+      senderName = vCardService.vcard(sender);
     }
+
+    OfflineService offlineService = new OfflineService();
+    int offlineCount = offlineService.offline(recevier);
+
+    this.data = new Data(sender, senderName, body, offlineCount);
+  }
 }
 
 class Data {
-    String title = "New message";
-    String sender = "";
-    @SerializedName("content-available")
-    int contentavailable = 1;
 
-    public Data(String sender) {
-        this.sender = sender;
+  String title;
+  String body;
+  String sender;
+
+  @SerializedName("content-available")
+  int contentavailable = 1;
+
+  public Data(
+    String sender,
+    String senderName,
+    MessageBody messagebody,
+    int offlineCount
+  ) {
+    this.sender = sender;
+    title = senderName.equals("") ? "Group message" : senderName;
+    if (messagebody != null) {
+      if (messagebody.type.equals("text")) {
+        body = messagebody.content;
+      } else if (messagebody.type.equals("image")) {
+        body = "Receive image";
+      } else if (messagebody.type.equals("voice")) {
+        body = "Receive voice";
+      } else if (messagebody.type.equals("video")) {
+        body = "Receive video";
+      } else if (messagebody.type.equals("file")) {
+        body = "Receive file";
+      }
+    } else {
+      body = "";
     }
-}
-
-class Notification {
-    String title;
-    String body;
-    String sound = "default";
-    int badge = 1;
-
-    public Notification(String senderName, MessageBody messagebody, int offlineCount) {
-        title = senderName.equals("") ? "Group message" : senderName;
-        badge = offlineCount;
-        if (messagebody != null) {
-            if (messagebody.type.equals("text")) {
-                body = messagebody.content;
-            } else if (messagebody.type.equals("image")) {
-                body = "Receive image";
-            } else if (messagebody.type.equals("voice")) {
-                body = "Receive voice";
-            } else if (messagebody.type.equals("video")) {
-                body = "Receive video";
-            } else if (messagebody.type.equals("file")) {
-                body = "Receive file";
-            }
-        } else {
-            body = "";
-        }
-    }
+  }
 }
