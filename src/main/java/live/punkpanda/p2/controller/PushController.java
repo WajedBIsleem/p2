@@ -46,89 +46,93 @@ public class PushController {
   public static IQHandler pubsubHandler =
     (
       iq -> {
-        final PubSub pubSub = iq.getExtension(PubSub.class);
-        if (pubSub != null && iq.getType() == IQ.Type.SET) {
-          final PubSub.Publish publish = pubSub.getPublish();
-          final String node = publish != null ? publish.getNode() : null;
-          final Jid jid = iq.getFrom();
-          final DataForm publishOptions = pubSub.getPublishOptions();
-          final String secret = publishOptions != null
-            ? publishOptions.findValue("secret")
-            : null;
-          final DataForm pushSummary = findPushSummary(publish);
+        LOGGER.info("-----------------------------------------------------------");
+        LOGGER.info("Wajed Notification");
+        LOGGER.info("-----------------------------------------------------------");
 
-          if (node != null && secret != null) {
-            final Target target = TargetStore.getInstance().find(node);
-            if (target != null) {
-              if (secret.equals(target.getSecret())) {
-                boolean isVoip = false;
-                try {
-                  Gson gson = new Gson();
-                  MessageBody messageBody = gson.fromJson(
-                    pushSummary.findValue("last-message-body"),
-                    MessageBody.class
-                  );
+      //   final PubSub pubSub = iq.getExtension(PubSub.class);
+      //   if (pubSub != null && iq.getType() == IQ.Type.SET) {
+      //     final PubSub.Publish publish = pubSub.getPublish();
+      //     final String node = publish != null ? publish.getNode() : null;
+      //     final Jid jid = iq.getFrom();
+      //     final DataForm publishOptions = pubSub.getPublishOptions();
+      //     final String secret = publishOptions != null
+      //       ? publishOptions.findValue("secret")
+      //       : null;
+      //     final DataForm pushSummary = findPushSummary(publish);
 
-                  isVoip = messageBody.type.equals("call");
-                } catch (Exception e) {
-                  return iq.createResult();
-                }
+      //     if (node != null && secret != null) {
+      //       final Target target = TargetStore.getInstance().find(node);
+      //       if (target != null) {
+      //         if (secret.equals(target.getSecret())) {
+      //           boolean isVoip = false;
+      //           try {
+      //             Gson gson = new Gson();
+      //             MessageBody messageBody = gson.fromJson(
+      //               pushSummary.findValue("last-message-body"),
+      //               MessageBody.class
+      //             );
 
-                final PushService pushService;
-                try {
-                  pushService =
-                    PushServiceManager.getPushServiceInstance(
-                      target.getService(),
-                      isVoip
-                    );
-                } catch (IllegalStateException e) {
-                  e.printStackTrace();
-                  return iq.createError(Condition.INTERNAL_SERVER_ERROR);
-                }
+      //             isVoip = messageBody.type.equals("call");
+      //           } catch (Exception e) {
+      //             return iq.createResult();
+      //           }
 
-                if (pushSummary != null) {
-                  if (target.getAccount() != jid.getLocal()) {
-                    try {
-                      String messageSender = pushSummary.findValue(
-                        "last-message-sender"
-                      );
-                      Jid messageSenderJid = Jid.ofEscaped(messageSender);
-                      Gson gson = new Gson();
-                      MessageBody messageBody = gson.fromJson(
-                        pushSummary.findValue("last-message-body"),
-                        MessageBody.class
-                      );
+      //           final PushService pushService;
+      //           try {
+      //             pushService =
+      //               PushServiceManager.getPushServiceInstance(
+      //                 target.getService(),
+      //                 isVoip
+      //               );
+      //           } catch (IllegalStateException e) {
+      //             e.printStackTrace();
+      //             return iq.createError(Condition.INTERNAL_SERVER_ERROR);
+      //           }
 
-                      pushService.push(
-                        target,
-                        messageSenderJid.getLocal(),
-                        messageBody
-                      );
-                      return iq.createResult();
-                    } catch (Exception e) {
-                      return iq.createResult();
-                    }
-                  } else {
-                    return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
-                  }
-                } else {
-                  //  if (pushService.push(target, "", null)) {
-                  //     return iq.createResult();
-                  //  } else {
-                  //     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
-                  //  }
-                }
-              } else {
-                return iq.createError(Condition.FORBIDDEN);
-              }
-            } else {
-              return iq.createError(Condition.ITEM_NOT_FOUND);
-            }
-          } else {
-            return iq.createError(Condition.FORBIDDEN);
-          }
-        }
-        return iq.createError(Condition.BAD_REQUEST);
+      //           if (pushSummary != null) {
+      //             if (target.getAccount() != jid.getLocal()) {
+      //               try {
+      //                 String messageSender = pushSummary.findValue(
+      //                   "last-message-sender"
+      //                 );
+      //                 Jid messageSenderJid = Jid.ofEscaped(messageSender);
+      //                 Gson gson = new Gson();
+      //                 MessageBody messageBody = gson.fromJson(
+      //                   pushSummary.findValue("last-message-body"),
+      //                   MessageBody.class
+      //                 );
+
+      //                 pushService.push(
+      //                   target,
+      //                   messageSenderJid.getLocal(),
+      //                   messageBody
+      //                 );
+      //                 return iq.createResult();
+      //               } catch (Exception e) {
+      //                 return iq.createResult();
+      //               }
+      //             } else {
+      //               return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+      //             }
+      //           } else {
+      //             //  if (pushService.push(target, "", null)) {
+      //             //     return iq.createResult();
+      //             //  } else {
+      //             //     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+      //             //  }
+      //           }
+      //         } else {
+      //           return iq.createError(Condition.FORBIDDEN);
+      //         }
+      //       } else {
+      //         return iq.createError(Condition.ITEM_NOT_FOUND);
+      //       }
+      //     } else {
+      //       return iq.createError(Condition.FORBIDDEN);
+      //     }
+      //   }
+      //   return iq.createError(Condition.BAD_REQUEST);
       }
     );
 
