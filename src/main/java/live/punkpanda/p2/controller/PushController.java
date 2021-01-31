@@ -54,6 +54,9 @@ public class PushController {
         LOGGER.info("Wajed Notification");
         LOGGER.info("-----------------------------------------------------------");
 
+        return iq.createResult();
+
+        
       //   final PubSub pubSub = iq.getExtension(PubSub.class);
       //   if (pubSub != null && iq.getType() == IQ.Type.SET) {
       //     final PubSub.Publish publish = pubSub.getPublish();
