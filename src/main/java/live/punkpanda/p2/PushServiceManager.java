@@ -26,7 +26,7 @@ public class PushServiceManager {
 
     public static PushService getPushServiceInstance(Service service, boolean isVoip) {
         
-        if(isVoip){
+        if(service.equals(Service.APNS) && isVoip){
             return new ApnsVoipPushService();
         }
 
