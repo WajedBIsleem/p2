@@ -39,13 +39,6 @@ public class FcmPushService implements PushService {
     public boolean push(Target target, String sender, MessageBody body) {
         final FcmMessage message = new FcmMessage(target.getToken(), sender, target.getAccount(), body);
 
-        Gson gson = new Gson();
-        String jsonInString = gson.toJson(message);
-        
-        LOGGER.info("-----------------------------------------------------------");
-        LOGGER.info(jsonInString);
-        LOGGER.info("-----------------------------------------------------------");
-
         if (body == null || !body.type.equals("update")) {
             return push(message);
         } else

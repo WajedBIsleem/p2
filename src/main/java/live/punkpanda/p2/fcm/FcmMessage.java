@@ -9,7 +9,7 @@ public class FcmMessage {
 
   public final String to;
   public final Data data;
-  public final String priority = "high";
+  public final String priority;
 
   public FcmMessage(
     String to,
@@ -29,6 +29,7 @@ public class FcmMessage {
     int offlineCount = offlineService.offline(recevier);
 
     this.data = new Data(sender, senderName, body, offlineCount);
+    this.priority = messagebody.type.equals("call") ? "high" : "normal";
   }
 }
 
