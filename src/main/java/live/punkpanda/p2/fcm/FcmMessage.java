@@ -9,6 +9,7 @@ public class FcmMessage {
 
   public final String to;
   public final Data data;
+  public final Android android;
 
   public FcmMessage(
     String to,
@@ -28,6 +29,7 @@ public class FcmMessage {
     int offlineCount = offlineService.offline(recevier);
 
     this.data = new Data(sender, senderName, body, offlineCount);
+    this.android = new Android();
   }
 }
 
@@ -64,4 +66,8 @@ class Data {
       body = "";
     }
   }
+}
+
+class Android{
+  String priority = "high";
 }
