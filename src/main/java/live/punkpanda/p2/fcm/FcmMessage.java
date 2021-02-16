@@ -19,7 +19,7 @@ public class FcmMessage {
   }
 }
 
-public class FcmMessage2 {
+class FcmMessage2 {
 
   public final String to;
   public final Data data;
