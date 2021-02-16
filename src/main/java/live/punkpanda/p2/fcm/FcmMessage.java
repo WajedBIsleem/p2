@@ -39,9 +39,9 @@ class Data {
   String priority = "high";
 
   @SerializedName("google.original_priority")
-  int original_priority = "high";
+  String original_priority = "high";
   @SerializedName("google.delivered_priority")
-  int delivered_priority = "high";
+  String delivered_priority = "high";
 
   @SerializedName("content-available")
   int contentavailable = 1;
