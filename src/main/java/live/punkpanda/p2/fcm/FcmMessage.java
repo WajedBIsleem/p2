@@ -30,14 +30,7 @@ public class FcmMessage {
     int offlineCount = offlineService.offline(recevier);
 
     this.data = new Data(sender, senderName, body, offlineCount);
-    this.notification = new Notification();
-    this.android = new Android();
   }
-}
-
-class Notification {
-  String title = "This week's edition is now available.";
-  String body = "NewsMagazine.com";
 }
 
 class Data {
@@ -45,6 +38,7 @@ class Data {
   String title;
   String body;
   String sender;
+  String priority = "high";
 
   @SerializedName("content-available")
   int contentavailable = 1;
@@ -73,8 +67,4 @@ class Data {
       body = "";
     }
   }
-}
-
-class Android{
-  String priority = "high";
 }
