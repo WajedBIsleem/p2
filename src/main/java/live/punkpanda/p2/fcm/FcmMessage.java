@@ -7,6 +7,20 @@ import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 
 public class FcmMessage {
 
+  public final FcmMessage2 message;
+
+  public FcmMessage(
+    String to,
+    String sender,
+    String recevier,
+    MessageBody body
+  ) {
+    this.message = new FcmMessage2(to, sender, recevier, body);
+  }
+}
+
+public class FcmMessage2 {
+
   public final String to;
   public final Data data;
   public final Android android;
