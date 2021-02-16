@@ -25,7 +25,7 @@ public class FcmMessage2 {
   public final Data data;
   public final Android android;
 
-  public FcmMessage(
+  public FcmMessage2(
     String to,
     String sender,
     String recevier,
