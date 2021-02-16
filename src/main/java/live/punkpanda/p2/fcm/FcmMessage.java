@@ -38,8 +38,10 @@ class Data {
   String sender;
   String priority = "high";
 
-  Google google = new Google();
-
+  @SerializedName("google.original_priority")
+  int original_priority = "high";
+  @SerializedName("google.delivered_priority")
+  int delivered_priority = "high";
 
   @SerializedName("content-available")
   int contentavailable = 1;
