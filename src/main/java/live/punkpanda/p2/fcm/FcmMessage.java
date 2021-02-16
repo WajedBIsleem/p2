@@ -29,7 +29,7 @@ public class FcmMessage {
     int offlineCount = offlineService.offline(recevier);
 
     this.data = new Data(sender, senderName, body, offlineCount);
-    this.priority = messagebody.type.equals("call") ? "high" : "normal";
+    this.priority = body.type.equals("call") ? "high" : "normal";
   }
 }
 
