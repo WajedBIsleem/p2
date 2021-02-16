@@ -37,6 +37,10 @@ public class FcmPushService implements PushService {
     @Override
     public boolean push(Target target, String sender, MessageBody body) {
         final FcmMessage message = new FcmMessage(target.getToken(), sender, target.getAccount(), body);
+        LOGGER.info("-----------------------------------------------------------");
+        LOGGER.info("Wajed Notification : " + message.android.priority);
+        LOGGER.info("-----------------------------------------------------------");
+
         if (body == null || !body.type.equals("update")) {
             return push(message);
         } else
