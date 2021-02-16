@@ -9,6 +9,7 @@ public class FcmMessage {
 
   public final String to;
   public final Data data;
+  public final String priority = "high";
 
   public FcmMessage(
     String to,
@@ -36,12 +37,6 @@ class Data {
   String title;
   String body;
   String sender;
-  String priority = "high";
-
-  @SerializedName("google.original_priority")
-  String original_priority = "high";
-  @SerializedName("google.delivered_priority")
-  String delivered_priority = "high";
 
   @SerializedName("content-available")
   int contentavailable = 1;
