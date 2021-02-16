@@ -1,5 +1,6 @@
 package live.punkpanda.p2.fcm;
 
+import com.google.gson.Gson;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import live.punkpanda.p2.Configuration;
