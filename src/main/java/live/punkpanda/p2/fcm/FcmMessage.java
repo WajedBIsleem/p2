@@ -9,6 +9,7 @@ public class FcmMessage {
 
   public final String to;
   public final Data data;
+  public final Notification notification;
   public final Android android;
 
   public FcmMessage(
@@ -29,8 +30,14 @@ public class FcmMessage {
     int offlineCount = offlineService.offline(recevier);
 
     this.data = new Data(sender, senderName, body, offlineCount);
+    this.notification = new Notification();
     this.android = new Android();
   }
+}
+
+class Notification {
+  String title = "This week's edition is now available.";
+  String body = "NewsMagazine.com";
 }
 
 class Data {
