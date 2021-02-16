@@ -9,8 +9,6 @@ public class FcmMessage {
 
   public final String to;
   public final Data data;
-  public final Notification notification;
-  public final Android android;
 
   public FcmMessage(
     String to,
