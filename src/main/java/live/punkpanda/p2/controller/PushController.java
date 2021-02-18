@@ -119,13 +119,11 @@ public class PushController {
                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                   }
                 } else {
-                  if(target.getService().equals(Service.FCM) || target.getService().equals(Service.PUSHY) ){
                    if (pushService.push(target, "", null)) {
                       return iq.createResult();
                    } else {
                       return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                    }
-                  }
                 }
               } else {
                 return iq.createError(Condition.FORBIDDEN);
