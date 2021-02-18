@@ -72,29 +72,32 @@ public class PushController {
             if (target != null) {
               if (secret.equals(target.getSecret())) {
                 boolean isVoip = false;
-                try {
-                  Gson gson = new Gson();
-                  MessageBody messageBody = gson.fromJson(
-                    pushSummary.findValue("last-message-body"),
-                    MessageBody.class
-                  );
 
-                  isVoip = messageBody.type.equals("call");
-                } catch (Exception e) {
-                  return iq.createResult();
-                }
 
-                final PushService pushService;
-                try {
-                  pushService =
-                    PushServiceManager.getPushServiceInstance(
-                      target.getService(),
-                      isVoip
+                if (pushSummary != null) {
+                  try {
+                    Gson gson = new Gson();
+                    MessageBody messageBody = gson.fromJson(
+                      pushSummary.findValue("last-message-body"),
+                      MessageBody.class
                     );
-                } catch (IllegalStateException e) {
-                  e.printStackTrace();
-                  return iq.createError(Condition.INTERNAL_SERVER_ERROR);
+
+                    isVoip = messageBody.type.equals("call");
+                  } catch (Exception e) {
+                    return iq.createResult();
+                  }
                 }
+                  final PushService pushService;
+                  try {
+                    pushService =
+                      PushServiceManager.getPushServiceInstance(
+                        target.getService(),
+                        isVoip
+                      );
+                  } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                    return iq.createError(Condition.INTERNAL_SERVER_ERROR);
+                  }
 
                 if (pushSummary != null) {
 
