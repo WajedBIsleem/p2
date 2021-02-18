@@ -97,6 +97,11 @@ public class PushController {
                 }
 
                 if (pushSummary != null) {
+
+                  LOGGER.info("-----------------------------------------------------------");
+                  LOGGER.info("Wajed Notification 3");
+                  LOGGER.info("-----------------------------------------------------------");
+
                   if (target.getAccount() != jid.getLocal()) {
                     try {
                       String messageSender = pushSummary.findValue(
