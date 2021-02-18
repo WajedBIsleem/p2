@@ -50,12 +50,6 @@ public class PushController {
   public static IQHandler pubsubHandler =
     (
       iq -> {
-        LOGGER.info("-----------------------------------------------------------");
-        LOGGER.info("Wajed Notification");
-        LOGGER.info("-----------------------------------------------------------");
-
-        // return iq.createResult();
-
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
           final PubSub.Publish publish = pubSub.getPublish();
@@ -100,11 +94,6 @@ public class PushController {
                   }
 
                 if (pushSummary != null) {
-
-                  LOGGER.info("-----------------------------------------------------------");
-                  LOGGER.info("Wajed Notification 3");
-                  LOGGER.info("-----------------------------------------------------------");
-
                   if (target.getAccount() != jid.getLocal()) {
                     try {
                       String messageSender = pushSummary.findValue(
@@ -130,12 +119,7 @@ public class PushController {
                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                   }
                 } else {
-
-                  LOGGER.info("-----------------------------------------------------------");
-                  LOGGER.info("Wajed Notification 2");
-                  LOGGER.info("-----------------------------------------------------------");
-          
-                  if(target.getService().equals(Service.FCM)){
+                  if(target.getService().equals(Service.FCM) || target.getService().equals(Service.PUSHY) ){
                    if (pushService.push(target, "", null)) {
                       return iq.createResult();
                    } else {
