@@ -50,9 +50,9 @@ public class PushController {
   public static IQHandler pubsubHandler =
     (
       iq -> {
-        // LOGGER.info("-----------------------------------------------------------");
-        // LOGGER.info("Wajed Notification");
-        // LOGGER.info("-----------------------------------------------------------");
+        LOGGER.info("-----------------------------------------------------------");
+        LOGGER.info("Wajed Notification");
+        LOGGER.info("-----------------------------------------------------------");
 
         // return iq.createResult();
 
