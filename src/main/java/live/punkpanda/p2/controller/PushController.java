@@ -122,6 +122,11 @@ public class PushController {
                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                   }
                 } else {
+
+                  LOGGER.info("-----------------------------------------------------------");
+                  LOGGER.info("Wajed Notification 2");
+                  LOGGER.info("-----------------------------------------------------------");
+          
                   if(target.getService().equals(Service.FCM)){
                    if (pushService.push(target, "", null)) {
                       return iq.createResult();
