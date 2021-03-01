@@ -118,13 +118,15 @@ public class PushController {
                   } else {
                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                   }
-                } else {
-                   if (pushService.push(target, "", null)) {
-                      return iq.createResult();
-                   } else {
-                      return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
-                   }
-                }
+                } 
+                return iq.createResult();
+                // else {
+                //    if (pushService.push(target, "", null)) {
+                //       return iq.createResult();
+                //    } else {
+                //       return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                //    }
+                // }
               } else {
                 return iq.createError(Condition.FORBIDDEN);
               }
