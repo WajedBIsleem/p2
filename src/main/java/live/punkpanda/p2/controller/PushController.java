@@ -51,8 +51,8 @@ public class PushController {
     (
       iq -> {
 
-        System.out.println("-----------------------");
-        System.out.println("Notification");
+        //System.out.println("-----------------------");
+        //System.out.println("Notification");
 
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
@@ -60,7 +60,7 @@ public class PushController {
           final String node = publish != null ? publish.getNode() : null;
           final Jid jid = iq.getFrom();
           
-          System.out.println("jid=" + jid);
+          //System.out.println("jid=" + jid);
 
           final DataForm publishOptions = pubSub.getPublishOptions();
           final String secret = publishOptions != null
@@ -71,12 +71,12 @@ public class PushController {
           if (node != null && secret != null) {
             final Target target = TargetStore.getInstance().find(node);
             
-            System.out.println("target=" + target.getAccount());
+            //System.out.println("target=" + target.getAccount());
             if (target != null) {
               if (secret.equals(target.getSecret())) {
                 boolean isVoip = false;
 
-                System.out.println("pushSummary=" + ((pushSummary != null) ? pushSummary.findValue("last-message-sender") : "null"));
+                //System.out.println("pushSummary=" + ((pushSummary != null) ? pushSummary.findValue("last-message-sender") : "null"));
                 if (pushSummary != null) {
                   try {
                     Gson gson = new Gson();
@@ -121,7 +121,7 @@ public class PushController {
                         messageBody
                       );
                       
-                      System.out.println("-----------------------");
+                      //System.out.println("-----------------------");
                       return iq.createResult();
                     } catch (Exception e) {
                       return iq.createResult();
@@ -130,15 +130,16 @@ public class PushController {
                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                   }
                 } 
-                else {
-                   if (pushService.push(target, "", null)) {
+                return iq.createResult();
+                // else {
+                //    if (pushService.push(target, "", null)) {
                      
-                      System.out.println("-----------------------");
-                      return iq.createResult();
-                   } else {
-                      return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
-                   }
-                }
+                //       System.out.println("-----------------------");
+                //       return iq.createResult();
+                //    } else {
+                //       return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                //    }
+                // }
               } else {
                 return iq.createError(Condition.FORBIDDEN);
               }
