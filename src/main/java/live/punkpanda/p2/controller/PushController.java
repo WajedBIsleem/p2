@@ -76,7 +76,7 @@ public class PushController {
               if (secret.equals(target.getSecret())) {
                 boolean isVoip = false;
 
-                System.out.println("pushSummary=" + (pushSummary != null) ? pushSummary.findValue("last-message-sender") : "null");
+                System.out.println("pushSummary=" + ((pushSummary != null) ? pushSummary.findValue("last-message-sender") : "null"));
                 if (pushSummary != null) {
                   try {
                     Gson gson = new Gson();
