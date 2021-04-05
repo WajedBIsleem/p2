@@ -139,17 +139,16 @@ public class PushController {
                       ) {
                         return iq.createResult();
                       } else {
-                        return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                        TargetStore.getInstance().delete(target.getAccount(), target.getDevice());
+                        return iq.createError(Condition.ITEM_NOT_FOUND);
                       }
                     } catch (Exception e) {
-                      System.out.println("error" + e.getMessage());
                       return iq.createResult();
                     }
                   } else {
                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                   }
                 }
-                System.out.println("wajed8");
                 return iq.createResult();
                 // else {
                 //    if (pushService.push(target, "", null)) {
