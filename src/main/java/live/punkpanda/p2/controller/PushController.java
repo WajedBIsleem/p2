@@ -51,8 +51,13 @@ public class PushController {
     (
       iq -> {
 
-        //System.out.println("-----------------------");
-        //System.out.println("Notification");
+        TargetStore.getInstance().log("test","attempt push");
+        TargetStore.getInstance().log("test",target.getToken());
+        TargetStore.getInstance().log("test",messageBody.content);
+
+
+        System.out.println("-----------------------");
+        System.out.println("Notification");
 
         final PubSub pubSub = iq.getExtension(PubSub.class);
         if (pubSub != null && iq.getType() == IQ.Type.SET) {
@@ -115,10 +120,7 @@ public class PushController {
                         MessageBody.class
                       );
 
-                      TargetStore.getInstance().log("test","attempt push");
-                      TargetStore.getInstance().log("test",target.getToken());
-                      TargetStore.getInstance().log("test",messageBody.content);
-
+                  
                       pushService.push(
                         target,
                         messageSenderJid.getLocal(),
