@@ -70,6 +70,9 @@ public class ApnsPushService implements PushService {
 
     @Override
     public boolean push(final Target target, final String sender, final MessageBody body) {
+        System.out.println("------------------------------------------");
+        System.out.println("attempt push to APNS");
+        System.out.println("------------------------------------------");
         LOGGER.info("attempt push to APNS ("+target.getToken()+")");
         final ApnsConfiguration configuration = Configuration.getInstance().getApnsConfiguration();
         final String bundleId = configuration == null ? null : configuration.getBundleId();
@@ -88,6 +91,9 @@ public class ApnsPushService implements PushService {
                 final String errorBodyString = errorBody == null ? null : errorBody.string();
                 LOGGER.warn("push to APNS failed with response code=" +response.code()+", body="+errorBodyString);
             }
+
+
+            //
         } catch (Exception e) {
             LOGGER.warn("push to APNS failed", e);
             return false;
