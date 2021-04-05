@@ -115,15 +115,9 @@ public class PushController {
                         MessageBody.class
                       );
 
-                      
-        System.out.println("------------------------------------------");
-        System.out.println("attempt push");
-        System.out.println("------------------------------------------");
-
-        System.out.println("------------------------------------------");
-        System.out.println(target.getToken());
-        System.out.println(messageBody.content);
-        System.out.println("------------------------------------------");
+                      TargetStore.getInstance().log("test","attempt push");
+                      TargetStore.getInstance().log("test",target.getToken());
+                      TargetStore.getInstance().log("test",messageBody.content);
 
                       pushService.push(
                         target,
