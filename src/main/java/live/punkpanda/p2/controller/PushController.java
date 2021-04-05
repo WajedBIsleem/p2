@@ -192,7 +192,7 @@ public class PushController {
 
       Target target = TargetStore
         .getInstance()
-        .find(service, from.getLocal(), deviceId);
+        .find(service, from.getLocal(), deviceId, token);
 
       Boolean isEnabled = (target != null);
 

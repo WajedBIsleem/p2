@@ -62,7 +62,7 @@ public class TargetStore {
     }
 
     public void create(Target target) {
-        Target t = find(target.getService(), target.getAccount(), target.getDevice());
+        Target t = find(target.getService(), target.getAccount(), target.getDevice(), target.getToken());
         if (t == null) {
             try (Connection connection = database.open()) {
                 connection.createQuery(
@@ -80,11 +80,11 @@ public class TargetStore {
         }
     }
 
-    public Target find(Service service, String account, String device) {
+    public Target find(Service service, String account, String device, String token) {
         try (Connection connection = database.open()) {
             return connection.createQuery(
-                    "select service,account,device,domain,token,token2,node,secret from target where service=:service and account=:account and device=:device")
-                    .addParameter("service", service).addParameter("account", account).addParameter("device", device)
+                    "select service,account,device,domain,token,token2,node,secret from target where service=:service and account=:account and (device=:device or token=:token)")
+                    .addParameter("service", service).addParameter("account", account).addParameter("device", device).addParameter("token", token)
                     .executeAndFetchFirst(Target.class);
         }
     }
