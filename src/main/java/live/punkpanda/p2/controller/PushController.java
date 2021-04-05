@@ -50,12 +50,6 @@ public class PushController {
   public static IQHandler pubsubHandler =
     (
       iq -> {
-
-         TargetStore.getInstance().log("test","attempt push");
-        // TargetStore.getInstance().log("test",target.getToken());
-        // TargetStore.getInstance().log("test",messageBody.content);
-
-
         System.out.println("-----------------------");
         System.out.println("Notification");
 
@@ -65,7 +59,7 @@ public class PushController {
           final String node = publish != null ? publish.getNode() : null;
           final Jid jid = iq.getFrom();
           
-          //System.out.println("jid=" + jid);
+          System.out.println("jid=" + jid);
 
           final DataForm publishOptions = pubSub.getPublishOptions();
           final String secret = publishOptions != null
@@ -76,12 +70,12 @@ public class PushController {
           if (node != null && secret != null) {
             final Target target = TargetStore.getInstance().find(node);
             
-            //System.out.println("target=" + target.getAccount());
+            System.out.println("target=" + target.getAccount());
             if (target != null) {
               if (secret.equals(target.getSecret())) {
                 boolean isVoip = false;
 
-                //System.out.println("pushSummary=" + ((pushSummary != null) ? pushSummary.findValue("last-message-sender") : "null"));
+                System.out.println("pushSummary=" + ((pushSummary != null) ? pushSummary.findValue("last-message-sender") : "null"));
                 if (pushSummary != null) {
                   try {
                     Gson gson = new Gson();
@@ -95,6 +89,7 @@ public class PushController {
                     return iq.createResult();
                   }
                 }
+
                   final PushService pushService;
                   try {
                     pushService =
@@ -108,18 +103,24 @@ public class PushController {
                   }
 
                 if (pushSummary != null) {
+                  System.out.println("wajed1");
+
                   if (target.getAccount() != jid.getLocal()) {
                     try {
+                      System.out.println("wajed2");
                       String messageSender = pushSummary.findValue(
                         "last-message-sender"
                       );
+                      System.out.println("wajed3");
                       Jid messageSenderJid = Jid.ofEscaped(messageSender);
+                      System.out.println("wajed4");
                       Gson gson = new Gson();
+                      System.out.println("wajed5");
                       MessageBody messageBody = gson.fromJson(
                         pushSummary.findValue("last-message-body"),
                         MessageBody.class
                       );
-
+                      System.out.println("wajed6");
                   
                       pushService.push(
                         target,
@@ -127,15 +128,17 @@ public class PushController {
                         messageBody
                       );
                       
-                      //System.out.println("-----------------------");
+                      System.out.println("wajed7");
                       return iq.createResult();
                     } catch (Exception e) {
+                      System.out.println("error" + e.getMessage());
                       return iq.createResult();
                     }
                   } else {
                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                   }
                 } 
+                System.out.println("wajed8");
                 return iq.createResult();
                 // else {
                 //    if (pushService.push(target, "", null)) {
