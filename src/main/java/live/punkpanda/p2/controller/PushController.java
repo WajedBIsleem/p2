@@ -10,6 +10,8 @@ import live.punkpanda.p2.pojo.Service;
 import live.punkpanda.p2.pojo.Target;
 import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 import live.punkpanda.p2.xmpp.extensions.push.Notification;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.stanza.IQHandler;
 import rocks.xmpp.core.stanza.model.IQ;
@@ -18,12 +20,12 @@ import rocks.xmpp.extensions.commands.model.Command;
 import rocks.xmpp.extensions.data.model.DataForm;
 import rocks.xmpp.extensions.pubsub.model.Item;
 import rocks.xmpp.extensions.pubsub.model.PubSub;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PushController {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(PushController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+    PushController.class
+  );
 
   private static final String COMMAND_NODE_REGISTER_PREFIX = "register-push-";
   private static final String COMMAND_NODE_UNREGISTER_PREFIX =
@@ -58,7 +60,7 @@ public class PushController {
           final PubSub.Publish publish = pubSub.getPublish();
           final String node = publish != null ? publish.getNode() : null;
           final Jid jid = iq.getFrom();
-          
+
           System.out.println("jid=" + jid);
 
           final DataForm publishOptions = pubSub.getPublishOptions();
@@ -69,13 +71,20 @@ public class PushController {
 
           if (node != null && secret != null) {
             final Target target = TargetStore.getInstance().find(node);
-            
+
             System.out.println("target=" + target.getAccount());
             if (target != null) {
               if (secret.equals(target.getSecret())) {
                 boolean isVoip = false;
 
-                System.out.println("pushSummary=" + ((pushSummary != null) ? pushSummary.findValue("last-message-sender") : "null"));
+                System.out.println(
+                  "pushSummary=" +
+                  (
+                    (pushSummary != null)
+                      ? pushSummary.findValue("last-message-sender")
+                      : "null"
+                  )
+                );
                 if (pushSummary != null) {
                   try {
                     Gson gson = new Gson();
@@ -90,46 +99,48 @@ public class PushController {
                   }
                 }
 
-                  final PushService pushService;
-                  try {
-                    pushService =
-                      PushServiceManager.getPushServiceInstance(
-                        target.getService(),
-                        isVoip
-                      );
-                  } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                    return iq.createError(Condition.INTERNAL_SERVER_ERROR);
-                  }
+                final PushService pushService;
+                try {
+                  pushService =
+                    PushServiceManager.getPushServiceInstance(
+                      target.getService(),
+                      isVoip
+                    );
+                } catch (IllegalStateException e) {
+                  e.printStackTrace();
+                  return iq.createError(Condition.INTERNAL_SERVER_ERROR);
+                }
 
                 if (pushSummary != null) {
-                  System.out.println("wajed1");
-
                   if (target.getAccount() != jid.getLocal()) {
                     try {
-                      System.out.println("wajed2");
                       String messageSender = pushSummary.findValue(
                         "last-message-sender"
                       );
-                      System.out.println("wajed3");
                       Jid messageSenderJid = Jid.ofEscaped(messageSender);
-                      System.out.println("wajed4");
                       Gson gson = new Gson();
-                      System.out.println("wajed5");
                       MessageBody messageBody = gson.fromJson(
                         pushSummary.findValue("last-message-body"),
                         MessageBody.class
                       );
-                      System.out.println("wajed6");
-                  
-                      pushService.push(
-                        target,
-                        messageSenderJid.getLocal(),
-                        messageBody
-                      );
-                      
-                      System.out.println("wajed7");
-                      return iq.createResult();
+
+                      // pushService.push(
+                      //   target,
+                      //   messageSenderJid.getLocal(),
+                      //   messageBody
+                      // );
+
+                      if (
+                        pushService.push(
+                          target,
+                          messageSenderJid.getLocal(),
+                          messageBody
+                        )
+                      ) {
+                        return iq.createResult();
+                      } else {
+                        return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
+                      }
                     } catch (Exception e) {
                       System.out.println("error" + e.getMessage());
                       return iq.createResult();
@@ -137,12 +148,12 @@ public class PushController {
                   } else {
                     return iq.createError(Condition.RECIPIENT_UNAVAILABLE);
                   }
-                } 
+                }
                 System.out.println("wajed8");
                 return iq.createResult();
                 // else {
                 //    if (pushService.push(target, "", null)) {
-                     
+
                 //       System.out.println("-----------------------");
                 //       return iq.createResult();
                 //    } else {
