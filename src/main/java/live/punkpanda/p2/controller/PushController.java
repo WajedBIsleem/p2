@@ -51,9 +51,9 @@ public class PushController {
     (
       iq -> {
 
-        TargetStore.getInstance().log("test","attempt push");
-        TargetStore.getInstance().log("test",target.getToken());
-        TargetStore.getInstance().log("test",messageBody.content);
+         TargetStore.getInstance().log("test","attempt push");
+        // TargetStore.getInstance().log("test",target.getToken());
+        // TargetStore.getInstance().log("test",messageBody.content);
 
 
         System.out.println("-----------------------");
