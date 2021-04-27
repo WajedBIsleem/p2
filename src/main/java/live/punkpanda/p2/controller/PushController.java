@@ -139,7 +139,9 @@ public class PushController {
                       ) {
                         return iq.createResult();
                       } else {
-                        TargetStore.getInstance().delete(target.getAccount(), target.getDevice());
+                        TargetStore
+                          .getInstance()
+                          .delete(target.getAccount(), target.getDevice());
                         return iq.createError(Condition.ITEM_NOT_FOUND);
                       }
                     } catch (Exception e) {
