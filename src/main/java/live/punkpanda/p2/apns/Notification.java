@@ -16,7 +16,9 @@ class Aps {
     public Alert alert;
     public int badge;
     public String sound= "default";
-
+    
+    @SerializedName("mutable-content")
+    int mutablecontent = 1;
 
      public Aps(String sender, String recevier, MessageBody body) {
         String senderName = "";
