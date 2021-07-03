@@ -9,4 +9,5 @@ public class MessageBody {
   public String sid;
   public String sender;
   public ArrayList<String> media;
+  public boolean m;
 }

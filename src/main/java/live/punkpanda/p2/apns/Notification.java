@@ -20,7 +20,10 @@ class Aps {
     @SerializedName("mutable-content")
     int mutablecontent = 1;
 
-     public Aps(String sender, String recevier, MessageBody body) {
+    public Aps(String sender, String recevier, MessageBody body) {
+        
+        mutablecontent=(body.m)? 1 : 0;
+        
         String senderName = "";
         if (!sender.equals("")) {
             VCardService vCardService = new VCardService();
