@@ -130,6 +130,11 @@ sudo cp target/p2-0.3.jar /opt
 sudo systemctl restart p2.service
 ```
 
+### Change Sandbox
+```
+nano /etc/p2/config.json
+```
+ 
 ### Database
 
 Since version 0.3 the Conversations Push Proxy requires a database (drivers for MariaDB are included by default but you can easily change `pom.xml` to include other drivers as well.)
