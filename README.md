@@ -133,6 +133,8 @@ sudo systemctl restart p2.service
 ### Change Sandbox
 ```
 nano /etc/p2/config.json
+
+sudo systemctl restart p2.service
 ```
  
 ### Database
