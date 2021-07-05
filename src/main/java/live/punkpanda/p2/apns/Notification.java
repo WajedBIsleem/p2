@@ -8,7 +8,11 @@ import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 public class Notification { 
     public Aps aps;
     public Notification(String sender, String recevier, MessageBody body) {
-        aps = new Aps(sender, recevier, body);
+        if(body.m){
+            aps = new Aps2(sender, recevier, body);
+        }else {
+            aps = new Aps(sender, recevier, body);
+        }
     }
 }
 
@@ -17,13 +21,7 @@ class Aps {
     public int badge;
     public String sound= "default";
     
-    @SerializedName("mutable-content")
-    int mutablecontent = 1;
-
     public Aps(String sender, String recevier, MessageBody body) {
-        
-        mutablecontent=(body.m)? 1 : 0;
-        
         String senderName = "";
         if (!sender.equals("")) {
             VCardService vCardService = new VCardService();
@@ -35,6 +33,29 @@ class Aps {
         alert = new Alert(senderName, body);
     }
 }
+
+
+class Aps2 {
+    public Alert alert;
+    public int badge;
+    public String sound= "default";
+    
+    @SerializedName("mutable-content")
+    int mutablecontent = 1;
+
+    public Aps2(String sender, String recevier, MessageBody body) {
+        String senderName = "";
+        if (!sender.equals("")) {
+            VCardService vCardService = new VCardService();
+            senderName = vCardService.vcard(sender);
+        }
+        OfflineService offlineService = new OfflineService();
+        badge = offlineService.offline(recevier);
+
+        alert = new Alert(senderName, body);
+    }
+}
+
 
 class Alert {
     public String title;
