@@ -16,6 +16,7 @@ public class Notification {
     }
 }
 
+
 class Aps {
     public Alert alert;
     public int badge;
@@ -35,24 +36,13 @@ class Aps {
 }
 
 
-class Aps2 {
-    public Alert alert;
-    public int badge;
-    public String sound= "default";
-    
+class Aps2 extends Aps {
+  
     @SerializedName("mutable-content")
     int mutablecontent = 1;
 
     public Aps2(String sender, String recevier, MessageBody body) {
-        String senderName = "";
-        if (!sender.equals("")) {
-            VCardService vCardService = new VCardService();
-            senderName = vCardService.vcard(sender);
-        }
-        OfflineService offlineService = new OfflineService();
-        badge = offlineService.offline(recevier);
-
-        alert = new Alert(senderName, body);
+       super(sender, recevier, body);
     }
 }
 
