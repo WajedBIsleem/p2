@@ -6,6 +6,7 @@ import retrofit2.http.*;
 public interface ApnsHttpInterface {
 
     @Headers({
+        "apns-push-type: alert",
         "apns-priority: 10"
     })
     @POST("/3/device/{token}")
