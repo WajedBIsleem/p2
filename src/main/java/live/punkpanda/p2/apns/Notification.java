@@ -38,8 +38,8 @@ class Aps {
 
 class Aps2 extends Aps {
   
-     @SerializedName("mutable-content")
-     boolean mutablecontent = true;
+     @SerializedName("mutable_content")
+     int mutablecontent = 1;
 
     public Aps2(String sender, String recevier, MessageBody body) {
        super(sender, recevier, body);
