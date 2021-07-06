@@ -8,11 +8,7 @@ import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 public class Notification { 
     public Aps aps;
     public Notification(String sender, String recevier, MessageBody body) {
-        //if(body.m){
-            aps = new Aps2(sender, recevier, body);
-        // }else {
-        //     aps = new Aps(sender, recevier, body);
-        // }
+        aps = new Aps(sender, recevier, body);
     }
 }
 
@@ -21,6 +17,9 @@ class Aps {
     public Alert alert;
     public int badge;
     public String sound= "default";
+
+    @SerializedName("mutable-content")
+     int mutablecontent = 1;
     
     public Aps(String sender, String recevier, MessageBody body) {
         String senderName = "";
@@ -34,18 +33,6 @@ class Aps {
         alert = new Alert(senderName, body);
     }
 }
-
-
-class Aps2 extends Aps {
-  
-     @SerializedName("mutable_content")
-     int mutablecontent = 1;
-
-    public Aps2(String sender, String recevier, MessageBody body) {
-       super(sender, recevier, body);
-    }
-}
-
 
 class Alert {
     public String title;
