@@ -8,11 +8,11 @@ import live.punkpanda.p2.xmpp.extensions.push.MessageBody;
 public class Notification { 
     public Aps aps;
     public Notification(String sender, String recevier, MessageBody body) {
-        if(body.m){
+        //if(body.m){
             aps = new Aps2(sender, recevier, body);
-        }else {
-            aps = new Aps(sender, recevier, body);
-        }
+        // }else {
+        //     aps = new Aps(sender, recevier, body);
+        // }
     }
 }
 
