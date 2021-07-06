@@ -29,8 +29,6 @@ public class ApnsPushService implements PushService {
 
     private static final String SANDBOX_BASE_URL = "https://api.sandbox.push.apple.com";
 
-    private static final String Dev_BASE_URL = "https://api.development.push.apple.com";
-
     private final ApnsHttpInterface httpInterface;
 
 
@@ -57,10 +55,7 @@ public class ApnsPushService implements PushService {
         ApnsConfiguration configuration = Configuration.getInstance().getApnsConfiguration();
 
         final Retrofit.Builder retrofitBuilder = new Retrofit.Builder();
-        if(configuration != null && configuration.isDevelopment()){
-            retrofitBuilder.baseUrl(Dev_BASE_URL);
-        }
-        else if (configuration != null && configuration.isSandbox()) {
+        if (configuration != null && configuration.isSandbox()) {
             retrofitBuilder.baseUrl(SANDBOX_BASE_URL);
         } else {
             retrofitBuilder.baseUrl(BASE_URL);
@@ -109,7 +104,6 @@ public class ApnsPushService implements PushService {
         private String certificate;
         private String bundleId;
         private boolean sandbox = false;
-        private boolean development = false;
 
         public String getPrivateKey() {
             return privateKey;
@@ -124,10 +118,6 @@ public class ApnsPushService implements PushService {
         }
 
         public boolean isSandbox() {
-            return sandbox;
-        }
-
-        public boolean isDevelopment() {
             return sandbox;
         }
     }
